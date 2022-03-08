@@ -7,16 +7,16 @@ const Results = ({ games, hits, money }) => {
     <section className="results">
       <h3 className="info">{games ? information : "..."}</h3>
       <div className="games">
-        <span>Ilość gier:</span>
+        <span>게임 수:</span>
         <span>{games}</span>
       </div>
       <div className="wallet">
-        <span>Kwota wydana na zakłady:</span>
-        <span>{games * prize}pln</span>
+        <span>베팅 금액:</span>
+        <span>{games * prize}c4ei</span>
       </div>
       <div className="money">
-        <span>Kwota wygrana:</span>
-        <span>{money}pln</span>
+        <span>당첨금액:</span>
+        <span>{money}c4ei</span>
       </div>
     </section>
   );

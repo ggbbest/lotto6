@@ -60,7 +60,7 @@ const App = () => {
     48,
     49,
   ];
-  const awards = { three: 24, four: 200, five: 5000, six: 3000000 };
+  const awards = { three: 5, four: 50, five: 5000, six: 3000000 };
 
   const [playerNumbers, setPlayerNumbers] = useState([]);
   const [drawedNumbers, setDrawedNumbers] = useState([]);
