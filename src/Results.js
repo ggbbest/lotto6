@@ -12,11 +12,11 @@ const Results = ({ games, hits, money }) => {
       </div>
       <div className="wallet">
         <span>베팅 금액:</span>
-        <span>{games * prize}c4ei</span>
+        <span>{games * prize} c4ei</span>
       </div>
       <div className="money">
         <span>당첨금액:</span>
-        <span>{money}c4ei</span>
+        <span>{money} c4ei</span>
       </div>
     </section>
   );
