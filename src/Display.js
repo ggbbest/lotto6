@@ -5,7 +5,7 @@ const Display = ({ drawedNumbers }) => {
   const balls = drawedNumbers.map((number) => (
     <Ball key={number} number={number} />
   ));
-  const displayInfo = drawedNumbers.length ? balls : "쿠폰에서 6개의 숫자를 지우십시오.";
+  const displayInfo = drawedNumbers.length ? balls : "6개의 숫자를 선택하세요.";
   return <div className="display">{displayInfo}</div>;
 };
 
