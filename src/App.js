@@ -8,57 +8,30 @@ import ButtonStart from "./ButtonStart";
 import Display from "./Display";
 import ButtonReset from "./ButtonReset";
 
+// yarn add mysql
+// yarn add sync-mysql
+var mysql = require('mysql');
+// let db_config = require('./database.js');// 2020-09-13
+// let sync_mysql = require('sync-mysql'); //2020-01-28
+// let sync_connection = new sync_mysql(db_config.constr());
+
+var dbcon = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
+});
+// const Caver = require('caver-js')
+// const caver = new Caver(process.env.CEIK_RPC)
+
+
 const App = () => {
   const numbers = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
+    1,2,3,4,5,6,7,8,9,10,
+    11,12,13,14,15,16,17,18,19,20,
+    21,22,23,24,25,26,27,28,29,30,
+    31,32,33,34,35,36,37,38,39,40,
+    41,42,43,44,45,46,47,48,49,
   ];
   const awards = { three: 5, four: 50, five: 5000, six: 3000000 };
 
@@ -71,20 +44,14 @@ const App = () => {
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
       const numbers = [...playerNumbers];
-
       numbers.push(number);
-
       setPlayerNumbers(numbers);
-
       event.target.classList.toggle("selected");
     }
     if (playerNumbers.includes(number)) {
       let numbers = [...playerNumbers];
-
       numbers = numbers.filter((num) => num !== number);
-
       setPlayerNumbers(numbers);
-
       event.target.classList.toggle("selected");
     }
   };
@@ -118,14 +85,32 @@ const App = () => {
     if (playerNumbers.length === 6) {
       const optionNumbers = [...numbers];
       const drawedNumbers = [];
-
       for (let i = 0; i < 6; i++) {
         const index = Math.floor(Math.random() * optionNumbers.length);
-
         drawedNumbers.push(optionNumbers[index]);
-
         optionNumbers.splice(index, 1);
       }
+
+      // playerNumbers.forEach(function (number) {
+      //   for (let i = 0; i < 6; i++) {
+      //     // number
+      //   }
+      // });
+
+      let num1_6 = playerNumbers[0]+","+playerNumbers[1]+","+playerNumbers[2]+","+playerNumbers[3]+","+playerNumbers[4]+","+playerNumbers[5];
+      var sql = "insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ,`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`)";
+      sql = sql +" select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
+      sql = sql +" 1 chips, '' addr, '' sendTr ";
+      sql = sql +" ,'"+num1_6+"',"+num1_6+" ";
+      sql = sql +" from dual ";
+      console.log(sql);
+      // insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ,`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'),  1 chips, '' addr, '' sendTr  ,'32,42,45,26,37,18',32,42,45,26,37,18  from dual 
+      dbcon.query(sql, function(err, result) {
+        if (err) 
+          console.log(err);
+          throw err;
+      });
+
       setDrawedNumbers(drawedNumbers);
       setGamesNumber((prevNumber) => prevNumber + 1);
       checkWin(playerNumbers, drawedNumbers);
@@ -140,7 +125,7 @@ const App = () => {
     setHits(0);
     setMoney(0);
   };
-
+/* eslint-disable */
   return (
     <div className="app">
       <Header />
