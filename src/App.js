@@ -10,19 +10,23 @@ import ButtonReset from "./ButtonReset";
 
 // yarn add mysql
 // yarn add sync-mysql
-var mysql = require('mysql');
+// var mysql = require('mysql');
 // let db_config = require('./database.js');// 2020-09-13
 // let sync_mysql = require('sync-mysql'); //2020-01-28
 // let sync_connection = new sync_mysql(db_config.constr());
 
-var dbcon = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE
-});
+// var dbcon = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_DATABASE
+// });
 // const Caver = require('caver-js')
 // const caver = new Caver(process.env.CEIK_RPC)
+// yarn add mysql2
+// const mysql2 = require('mysql2/promise'); 
+// const pool = mysql2.createPool(db_config.constr());
+// const connection = pool.getConnection(async conn => conn); 
 
 
 const App = () => {
@@ -104,12 +108,23 @@ const App = () => {
       sql = sql +" ,'"+num1_6+"',"+num1_6+" ";
       sql = sql +" from dual ";
       console.log(sql);
-      // insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ,`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'),  1 chips, '' addr, '' sendTr  ,'32,42,45,26,37,18',32,42,45,26,37,18  from dual 
-      dbcon.query(sql, function(err, result) {
-        if (err) 
-          console.log(err);
-          throw err;
-      });
+
+      // try { 
+      //   connection.beginTransaction(); 
+      //   connection.query(sql); 
+      //   connection.commit(); 
+      //   console.log('insert success!'); 
+      // } catch (err) { 
+      //   connection.rollback(); 
+      //   throw err; 
+      // } finally { 
+      //   connection.release();
+      // }
+      // dbcon.query(sql, function(err, result) {
+      //   if (err) 
+      //     console.log(err);
+      //     throw err;
+      // });
 
       setDrawedNumbers(drawedNumbers);
       setGamesNumber((prevNumber) => prevNumber + 1);

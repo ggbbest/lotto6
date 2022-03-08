@@ -1,8 +1,8 @@
 import React from "react";
 
 const Results = ({ games, hits, money }) => {
-  const prize = 3;
-  const information = hits ? `Trafiłeś ${hits}-kę!` : "Nic nie trafiłeś...";
+  const prize = 1;
+  const information = hits ? `${hits}개 맞음` : "0개 맞음";
   return (
     <section className="results">
       <h3 className="info">{games ? information : "..."}</h3>
