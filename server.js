@@ -47,11 +47,15 @@ app.get('/api/info', (req, res) => {
     });
 })
 
-app.use(express.static(path.join(__dirname, 'react-project/build')));
+app.use( '/', express.static( path.join(__dirname, 'public') ))
+app.use( '/lotto', express.static( path.join(__dirname, 'lotto/build') ))
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '/react-project/build/index.html'));
-});
+app.get('/', function(요청,응답){
+  응답.sendFile( path.join(__dirname, 'public/main.html') )
+}) 
+app.get('/lotto', function(요청,응답){
+  응답.sendFile( path.join(__dirname, 'lotto/build/index.html') )
+})
 
 app.listen(PORT, () => {
     console.log(`Server On : http://localhost:${PORT}/`);
