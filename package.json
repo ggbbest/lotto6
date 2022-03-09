@@ -1,50 +1,17 @@
 {
-  "homepage": "https://lotto.c4ei.net",
-  "name": "lotto",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.11.5",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "axios": "^0.26.0",
-    "cardinal": "^2.1.1",
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
-    "gh-pages": "^3.1.0",
-    "mysql": "^2.18.1",
-    "mysql2": "^2.3.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "^5.0.0",
-    "sync-mysql": "^3.0.1",
-    "web-vitals": "^0.2.4"
-  },
+  "name": "lotto.c4ei.net",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "start_org": "export PORT=3007 && react-scripts start",
-    "start": "npx nodemon server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mysql": "^2.18.1"
   }
 }

@@ -8,27 +8,6 @@ import ButtonStart from "./ButtonStart";
 import Display from "./Display";
 import ButtonReset from "./ButtonReset";
 
-// yarn add mysql
-// yarn add sync-mysql
-// var mysql = require('mysql');
-// let db_config = require('./database.js');// 2020-09-13
-// let sync_mysql = require('sync-mysql'); //2020-01-28
-// let sync_connection = new sync_mysql(db_config.constr());
-
-// var dbcon = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASS,
-//   database: process.env.DB_DATABASE
-// });
-// const Caver = require('caver-js')
-// const caver = new Caver(process.env.CEIK_RPC)
-// yarn add mysql2
-// const mysql2 = require('mysql2/promise'); 
-// const pool = mysql2.createPool(db_config.constr());
-// const connection = pool.getConnection(async conn => conn); 
-
-
 const App = () => {
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,

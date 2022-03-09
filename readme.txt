@@ -1,3 +1,17 @@
+Node+Express 서버와 React 연동하기
+https://codingapple.com/unit/nodejs-react-integration/
+
+1. 작업폴더를 에디터로 오픈 한 뒤에 터미널을 열어서 npm init 입력 후 뭐 선택하라고 하면 엔터 여러번 
+2. npm install express 입력  
+
+yarn add express
+yarn add mysql
+yarn add cors
+yarn add dotenv
+3. server.js 파일을 만드시고 다음 코드 작성
+
+npx create-react-app lotto
+
 깃이상으로 마스터 소스받아옴
 2022-03-08 lotto
 1장 1klay
@@ -29,5 +43,4 @@
 3등: 총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%
 4등: 50,000원 --> 50klay
 5등: 5,000원 --> 5klay
-
 
