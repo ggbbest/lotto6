@@ -19,43 +19,55 @@ const dbCon = mysql.createConnection({
     database: process.env.DB_DATABASE
 });
 
-// dbCon.connect((err) => {
-//     if (err) {
-//       console.log('error connecting: ' + err.stack);
-//       return;
-//     }
-//     console.log('success');
-// });
-
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
-    // res.send('Server Response Success');
-    res.redirect('index');
+// app.get('/', (req, res) => {
+//     // res.send('Server Response Success');
+//     res.redirect('index');
+// })
+//#########################################################################
+app.use( '/', express.static( path.join(__dirname, 'public') ))
+app.use( '/lotto', express.static( path.join(__dirname, 'lotto/build') ))
+
+app.get('/', function(req, res){
+    res.sendFile( path.join(__dirname, 'public/main.html') )
+}) 
+app.get('/lotto', function(req, res){
+    res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
-app.get('/hello', (req, res) => {
-    res.send({ hello : 'Hello react' });
-})
+//#########################################################################
+
+// app.get('/hello', (req, res) => {
+//     res.send({ hello : 'Hello react' });
+// })
+//#########################################################################
 app.get('/api/info', (req, res) => {
     dbCon.connect(function(err) {
         if (err) throw err;
-        console.log('Connected');
+        // console.log('Connected');
         dbCon.query("SELECT * FROM lotto", (err, data) => {
             if(!err) res.send({ data : data });
             else res.send(err);
         })
     });
 })
-
-app.use( '/', express.static( path.join(__dirname, 'public') ))
-app.use( '/lotto', express.static( path.join(__dirname, 'lotto/build') ))
-
-app.get('/', function(요청,응답){
-  응답.sendFile( path.join(__dirname, 'public/main.html') )
-}) 
-app.get('/lotto', function(요청,응답){
-  응답.sendFile( path.join(__dirname, 'lotto/build/index.html') )
+app.get('/api/week', (req, res) => {
+    dbCon.connect(function(err) {
+        // if (err) throw err;
+        if (err){console.log(err);}
+        // console.log('Connected');
+        dbCon.query("SELECT concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
+            if(!err) res.send({ data : data });
+            else res.send(err);
+        });
+    });
+    
+    // dbCon.release(function(err) {
+    //     if (err){console.log(err);}
+    // }); 
 })
+//#########################################################################
+
 
 app.listen(PORT, () => {
     console.log(`Server On : http://localhost:${PORT}/`);

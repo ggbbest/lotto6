@@ -1,34 +1,28 @@
-import React from "react";
-// yarn remove mysql
-// //npm install sync-request@2.2.0
-// // yarn add sync-request@2.2.0
-// yarn remove sync-request
-// let db_config = require(__dirname + '/database.js');// 2020-09-13
-// let sync_mysql = require('sync-mysql'); //2020-01-28
-// let sync_connection = new sync_mysql(db_config.constr());
-
-// let YY_W="";
-// let sql = "SELECT concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) YY_W";
-// let result = sync_connection.query(sql);
-// YY_W = result[0].YY_W;
-// console.log("############# " + YY_W +" : rtn #############");
-
-// conn.query(sql, function (err, rows, fields) {
-//   if (err) { 
-//     console.log('query is not excuted. select fail...\n' + err); 
-//   } else { 
-//     if (rows.length > 0) { YY_W = rows[0].YY_W; }
-//   }
-// }
-
-// var sql = "SELECT concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) YY_W" ;
-// console.log("############# " + YY_W +" : rtn #############");
+// import React from "react";
+import React,{useState, useEffect} from "react";
+import axios from "axios";
 
 const Header = () => {
-
+  const [datatWeeks, setData] = useState([])
+    useEffect(()=>{
+      axios.get("https://lotto.c4ei.net/api/week")
+      .then( 
+        reponse => {
+          setData(reponse.data);
+          // console.log(reponse.data);
+        }
+      )
+      .catch( err => console.log(err) );
+  },[]);
+// console.log(datatWeeks.map(dtweek => dtweek[0].yyyyw))
   return (
     <header>
-      <h1>Lotto 6/45</h1>
+      {/* {datatWeeks.map(dtweek => dtweek.yyyyw)} */}
+      {datatWeeks && <h1> {
+        JSON.stringify(datatWeeks, null, 2)
+        // JSON.parse(JSON.stringify(datatWeeks, null, 2))[0]
+      } 
+      Lotto 6/45 </h1>}
     </header>
   );
 };
