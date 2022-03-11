@@ -10,7 +10,7 @@ import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
 import { prepare, request, getResult } from 'klip-sdk'
-import { response } from "express";
+// import { response } from "express";
 
 const App = () => {
   const numbers = [
@@ -28,6 +28,7 @@ const App = () => {
   const [gamesNumber, setGamesNumber] = useState(0);
   const [hits, setHits] = useState(0);
   const [money, setMoney] = useState(0);
+  // const [linkTR, setlinkTR] = useState(0);
 
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
@@ -81,11 +82,13 @@ const App = () => {
         num6: playerNumbers[5],
         tx_hash: tx_hash
       };
+      // setlinkTR(tx_hash)
       // console.log(response);
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
       .then((res) => {
           console.log(res.data)
-          response.redirect('/getLotto/'+tx_hash)
+          // response.redirect('/getLotto/'+tx_hash)
+          document.writeln("https://c4ei.net/getLotto/"+tx_hash)
       }).catch((error) => {
           console.log(error)
       });
@@ -169,6 +172,7 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
         <section className="controls">
           <ButtonReset reset={resetGame} />
           <ButtonStart playerNumbers={playerNumbers} start={startDraw} />
+          {/* <button onClick={() => window.open('https://c4ei.net/getLotto/{linkTR}', '_blank')}>transaction log</button> */}
         </section>
         {/* //////////////// */}
         {/* <div className='donate-page'>
