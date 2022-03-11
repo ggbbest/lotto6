@@ -1,3 +1,8 @@
+select @@global.time_zone, @@session.time_zone,@@system_time_zone;
+SET GLOBAL time_zone='+09:00';
+SET time_zone='+09:00';
+commit
+
 Node+Express 서버와 React 연동하기
 https://codingapple.com/unit/nodejs-react-integration/
 

@@ -24,15 +24,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(bodyParser.json());
-
-
-// var db_config = require(__dirname + '/database.js');// 2020-09-13
-// var sync_mysql = require('sync-mysql'); //2020-01-28
-// let sync_connection = new sync_mysql(db_config.constr());
-
-// let result1 = sync_connection.query("SELECT id, c4ei_addr, c4ei_balance FROM user WHERE c4ei_addr='" + txt_to_address + "'");
-// let to_id = result1[0].id;
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 // app.get('/', (req, res) => {
 //     // res.send('Server Response Success');
 //     res.redirect('index');
