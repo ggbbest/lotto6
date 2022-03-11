@@ -19,6 +19,14 @@ const dbCon = mysql.createConnection({
     database: process.env.DB_DATABASE
 });
 
+// var db_config = require(__dirname + '/database.js');// 2020-09-13
+// var sync_mysql = require('sync-mysql'); //2020-01-28
+// let sync_connection = new sync_mysql(db_config.constr());
+
+// let result1 = sync_connection.query("SELECT id, c4ei_addr, c4ei_balance FROM user WHERE c4ei_addr='" + txt_to_address + "'");
+// let to_id = result1[0].id;
+
+
 app.use(cors(corsOptions));
 
 // app.get('/', (req, res) => {
@@ -46,25 +54,31 @@ app.get('/api/info', (req, res) => {
         if (err) throw err;
         // console.log('Connected');
         dbCon.query("SELECT * FROM lotto", (err, data) => {
-            if(!err) res.send({ data : data });
-            else res.send(err);
+            if(!err) {
+                // res.header("Content-Type: application/json")
+                res.send({ data : data });
+            } else {
+                res.send(err);
+            }
         })
     });
+    dbCon.end();
 })
 app.get('/api/week', (req, res) => {
     dbCon.connect(function(err) {
-        // if (err) throw err;
         if (err){console.log(err);}
-        // console.log('Connected');
-        dbCon.query("SELECT concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
-            if(!err) res.send({ data : data });
-            else res.send(err);
+        dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
+            if(!err)
+            {
+                res.header("Content-Type: application/json")
+                res.send(JSON.stringify(data))
+                // res.send({ data : data });
+            }else {
+                res.send(err);
+            }
         });
     });
-    
-    // dbCon.release(function(err) {
-    //     if (err){console.log(err);}
-    // }); 
+    // setTimeout(dbCon.end() , 1500)
 })
 //#########################################################################
 
