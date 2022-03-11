@@ -82,11 +82,21 @@ app.post('/api/setLotto', (req, res) => {
     // 
     console.log("#### server 89 #### ");
     // console.log("#### server 89 #### "+ req.body.numb_tot +" : req.body.numb_tot ");
+    
+    let numb_tot = [req.body.num1,req.body.num2,req.body.num3,req.body.num4,req.body.num5,req.body.num6]
+    //전체 번호는 소팅되서 저장 되게
+    numb_tot.sort(function(a, b)  {
+        if(a > b) return 1;
+        if(a === b) return 0;
+        if(a < b) return -1;
+      });
+
+    //.slice().sort();
     const lottoNo = {
         // id: lottoNo.length + 1,
         chips: req.body.chips,
         // addr: req.body.addr,
-        numb_tot: req.body.numb_tot,
+        // numb_tot: req.body.numb_tot,
         num1: req.body.num1,
         num2: req.body.num2,
         num3: req.body.num3,
@@ -100,7 +110,7 @@ app.post('/api/setLotto', (req, res) => {
     _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
     _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
     _sql =_sql + lottoNo.chips+" chips, '' addr, '' sendTr ";
-    _sql =_sql +",'"+lottoNo.numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
+    _sql =_sql +",'"+numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
     _sql =_sql +"from dual; ";
 
     console.log(_sql);

@@ -77,11 +77,13 @@ const App = () => {
   // async
   function saveLottoNum() {
     // try {
-      let numb_tot = playerNumbers[0] +","+playerNumbers[1] +","+playerNumbers[2] +","+playerNumbers[3] +","+playerNumbers[4] +","+playerNumbers[5];
-      console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
+      // let numb_tot = playerNumbers[0] +","+playerNumbers[1] +","+playerNumbers[2] +","+playerNumbers[3] +","+playerNumbers[4] +","+playerNumbers[5];
+      // let numb_tot = playerNumbers;
+      // numb_tot.slice().sort();
+      // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
       const data = {
         chips: "1",
-        numb_tot: numb_tot,
+        // numb_tot: numb_tot,
         num1: playerNumbers[0],
         num2: playerNumbers[1],
         num3: playerNumbers[2],

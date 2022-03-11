@@ -25,3 +25,4 @@ yarn-error.log*
 
 database.js
 node_modules
+build
