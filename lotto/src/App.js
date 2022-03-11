@@ -10,7 +10,7 @@ import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
 import { prepare, request, getResult } from 'klip-sdk'
-// import { response } from "express";
+import { response } from "express";
 
 const App = () => {
   const numbers = [
@@ -85,7 +85,7 @@ const App = () => {
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
       .then((res) => {
           console.log(res.data)
-          // response.redirect()
+          response.redirect('/getLotto/'+tx_hash)
       }).catch((error) => {
           console.log(error)
       });
