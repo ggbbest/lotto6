@@ -12,12 +12,19 @@ var corsOptions = {
 const dotenv = require('dotenv');
 dotenv.config();
 const mysql = require('mysql');
+const { wrap } = require('module');
 const dbCon = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_DATABASE
 });
+dbCon.connect();
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+app.use(bodyParser.json());
+
 
 // var db_config = require(__dirname + '/database.js');// 2020-09-13
 // var sync_mysql = require('sync-mysql'); //2020-01-28
@@ -25,10 +32,7 @@ const dbCon = mysql.createConnection({
 
 // let result1 = sync_connection.query("SELECT id, c4ei_addr, c4ei_balance FROM user WHERE c4ei_addr='" + txt_to_address + "'");
 // let to_id = result1[0].id;
-
-
 app.use(cors(corsOptions));
-
 // app.get('/', (req, res) => {
 //     // res.send('Server Response Success');
 //     res.redirect('index');
@@ -44,44 +48,82 @@ app.get('/lotto', function(req, res){
     res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
 //#########################################################################
-
 // app.get('/hello', (req, res) => {
 //     res.send({ hello : 'Hello react' });
 // })
 //#########################################################################
 app.get('/api/info', (req, res) => {
-    dbCon.connect(function(err) {
-        if (err) throw err;
-        // console.log('Connected');
-        dbCon.query("SELECT * FROM lotto", (err, data) => {
-            if(!err) {
-                // res.header("Content-Type: application/json")
-                res.send({ data : data });
-            } else {
-                res.send(err);
-            }
-        })
-    });
-    dbCon.end();
+    dbCon.query("SELECT * FROM lotto", (err, data) => {
+        if(!err) {
+            // res.header("Content-Type: application/json")
+            res.send({ data : data });
+        } else {
+            res.send(err);
+        }
+    })
 })
 app.get('/api/week', (req, res) => {
-    dbCon.connect(function(err) {
-        if (err){console.log(err);}
-        dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
-            if(!err)
-            {
-                res.header("Content-Type: application/json")
-                res.send(JSON.stringify(data))
-                // res.send({ data : data });
-            }else {
-                res.send(err);
-            }
-        });
+    dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
+        if(!err)
+        {
+            res.header("Content-Type: application/json")
+            res.send(JSON.stringify(data))
+        }else {
+            res.send(err);
+        }
     });
-    // setTimeout(dbCon.end() , 1500)
 })
-//#########################################################################
 
+app.post('/api/setLotto', (req, res) => {
+    // if(!req.body.yyyymmdd || req.body.yyyymmdd.length < 6){
+    //     // 400 Bad Request
+    //     res.status(400).send('yyyymmdd is required and should be minimum 6 characters.');
+    //     return;
+    // 
+    console.log("#### server 89 #### ");
+    // console.log("#### server 89 #### "+ req.body.numb_tot +" : req.body.numb_tot ");
+    const lottoNo = {
+        // id: lottoNo.length + 1,
+        chips: req.body.chips,
+        // addr: req.body.addr,
+        numb_tot: req.body.numb_tot,
+        num1: req.body.num1,
+        num2: req.body.num2,
+        num3: req.body.num3,
+        num4: req.body.num4,
+        num5: req.body.num5,
+        num6: req.body.num6
+    };
+    
+    let _sql ="";
+    _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ";
+    _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
+    _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
+    _sql =_sql + lottoNo.chips+" chips, '' addr, '' sendTr ";
+    _sql =_sql +",'"+lottoNo.numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
+    _sql =_sql +"from dual; ";
+
+    console.log(_sql);
+    dbCon.query(_sql, (err, data) => { if(!err) { res.send(lottoNo); } else { res.send(err); } });
+    // courses.push(lottoNo);
+    // res.send(lottoNo);
+});
+
+// app.get('/api/setLotto/:id', (req, res) => {
+    
+//     dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
+//         if(!err)
+//         {
+//             res.header("Content-Type: application/json")
+//             res.send(JSON.stringify(data))
+//             // res.send({ data : data });
+//         }else {
+//             res.send(err);
+//         }
+//     });
+//     
+// })
+//#########################################################################
 
 app.listen(PORT, () => {
     console.log(`Server On : http://localhost:${PORT}/`);

@@ -8,6 +8,17 @@ import ButtonStart from "./ButtonStart";
 import Display from "./Display";
 import ButtonReset from "./ButtonReset";
 
+import axios from 'axios'; 
+// const dotenv = require('dotenv');
+// dotenv.config();
+// const mysql = require('mysql');
+// const dbCon = mysql.createConnection({
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASS,
+//     database: process.env.DB_DATABASE
+// });
+
 const App = () => {
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,
@@ -63,6 +74,29 @@ const App = () => {
       setMoney((prev) => prev + awards.six);
     }
   };
+  // async
+  function saveLottoNum() {
+    // try {
+      let numb_tot = playerNumbers[0] +","+playerNumbers[1] +","+playerNumbers[2] +","+playerNumbers[3] +","+playerNumbers[4] +","+playerNumbers[5];
+      console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
+      const data = {
+        chips: "1",
+        numb_tot: numb_tot,
+        num1: playerNumbers[0],
+        num2: playerNumbers[1],
+        num3: playerNumbers[2],
+        num4: playerNumbers[3],
+        num5: playerNumbers[4],
+        num6: playerNumbers[5]
+      };
+      // console.log(response);
+      axios.post('https://lotto.c4ei.net/api/setLotto', data)
+      .then((res) => {
+          console.log(res.data)
+      }).catch((error) => {
+          console.log(error)
+      });
+  }
 
   const startDraw = () => {
     if (playerNumbers.length === 6) {
@@ -79,27 +113,27 @@ const App = () => {
       //     // number
       //   }
       // });
-
-      let num1_6 = playerNumbers[0]+","+playerNumbers[1]+","+playerNumbers[2]+","+playerNumbers[3]+","+playerNumbers[4]+","+playerNumbers[5];
-      var sql = "insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ,`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`)";
-      sql = sql +" select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
-      sql = sql +" 1 chips, '' addr, '' sendTr ";
-      sql = sql +" ,'"+num1_6+"',"+num1_6+" ";
-      sql = sql +" from dual ";
-      console.log(sql);
+      saveLottoNum()
+      // let numb_tot = playerNumbers[0] +","+playerNumbers[1] +","+playerNumbers[2] +","+playerNumbers[3] +","+playerNumbers[4] +","+playerNumbers[5];
+      // var sql = "insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ,`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`)";
+      // sql = sql +" select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
+      // sql = sql +" 1 chips, '' addr, '' sendTr ";
+      // sql = sql +" ,'"+numb_tot+"',"+numb_tot+" ";
+      // sql = sql +" from dual ";
+      // console.log("#### App 111 #### "+ sql);
 
       // try { 
-      //   connection.beginTransaction(); 
-      //   connection.query(sql); 
-      //   connection.commit(); 
+      //   dbCon.beginTransaction(); 
+      //   dbCon.query(sql); 
+      //   dbCon.commit(); 
       //   console.log('insert success!'); 
       // } catch (err) { 
-      //   connection.rollback(); 
+      //   dbCon.rollback(); 
       //   throw err; 
       // } finally { 
-      //   connection.release();
+      //   // dbCon.close();
       // }
-      // dbcon.query(sql, function(err, result) {
+      // dbCon.query(sql, function(err, result) {
       //   if (err) 
       //     console.log(err);
       //     throw err;
