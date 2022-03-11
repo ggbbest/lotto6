@@ -44,16 +44,17 @@ app.get('/lotto', function(req, res){
 //     res.send({ hello : 'Hello react' });
 // })
 //#########################################################################
-app.get('/api/info', (req, res) => {
-    dbCon.query("SELECT * FROM lotto", (err, data) => {
+app.get('/api/getLotto/:id', (req, res) => {
+    dbCon.query("SELECT * FROM lotto where sendTr='"+req.params.id+"'", (err, data) => {
         if(!err) {
-            // res.header("Content-Type: application/json")
-            res.send({ data : data });
+            res.header("Content-Type: application/json")
+            res.send(JSON.stringify(data))
         } else {
             res.send(err);
         }
     })
 })
+
 app.get('/api/week', (req, res) => {
     dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
         if(!err)

@@ -10,6 +10,7 @@ import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
 import { prepare, request, getResult } from 'klip-sdk'
+// import { response } from "express";
 
 const App = () => {
   const numbers = [
@@ -84,6 +85,7 @@ const App = () => {
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
       .then((res) => {
           console.log(res.data)
+          // response.redirect()
       }).catch((error) => {
           console.log(error)
       });
@@ -146,14 +148,13 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
         }
       }
     }, 1000);
-// "request_key": "0b0ee0ad-62b3-4146-980b-531b3201265d",
-// "expiration_time": 1600011054,
-// "status": "completed",
-// "result": {
-// "tx_hash": "0x82d018556e88b8f8f43dc2c725a683afc204bfd3c17230c41252354980f77fb3",
-// "status": "success"
-// }
-    // saveLottoNum();
+  // "request_key": "0b0ee0ad-62b3-4146-980b-531b3201265d",
+  // "expiration_time": 1600011054,
+  // "status": "completed",
+  // "result": {
+  // "tx_hash": "0x82d018556e88b8f8f43dc2c725a683afc204bfd3c17230c41252354980f77fb3",
+  // "status": "success"
+  // }
   }
   ///////////////////////////////////////////////////////////////////
 /* eslint-disable */
@@ -173,9 +174,9 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
         {/* <div className='donate-page'>
           {step === SEND_REQUEST &&
             (<>
-              <div className='title'>1KLAY를<br /> 아래 주소로 후원</div>
+              <div className='title'>1KLAY를<br /> 아래 주소로 로또 참여</div>
               <div className='address'>{to}</div>
-              <Button onClick={sendPrepareRequest}>KLAY 후원하기</Button>
+              <Button onClick={sendPrepareRequest}>KLAY 로또 참여하기</Button>
             </>)}
           {step === SHOW_LOADING && (
             <Spinner />
@@ -184,11 +185,12 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
             <div className='result'>
               <img src="https://klipwallet.com/img/home-klip-user-guide-event.png" />
               <div className='message'>
-                후원이 완료되었습니다!!
+                로또 참여 완료되었습니다!!
               </div>
             </div>
           )}
         </div> */}
+        {/* https://lotto.c4ei.net/api/getLotto/0x817b4b495bc86faee85cbb9c404e59471629e004d1d892714b0af19d2e909266 */}
         {/* //////////////// */}
       </main>
     </div>
