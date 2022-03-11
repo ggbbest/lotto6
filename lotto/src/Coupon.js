@@ -10,6 +10,10 @@ const Coupon = ({ numbers, add }) => {
     <div className="coupon">
       {fields}
       <div className="number"></div>
+      <div className="number"></div>
+      <div className="number"></div>
+      <div className="number"></div>
+      <div className="number"></div>
     </div>
   );
 };

@@ -5,18 +5,18 @@ const Results = ({ games, hits, money }) => {
   const information = hits ? `${hits}개 맞음` : "0개 맞음";
   return (
     <section className="results">
-      <h3 className="info">{games ? information : "..."}</h3>
-      <div className="games">
+      <h3 className="info" style={{display: "none"}}>{games ? information : "..."}</h3>
+      <div className="games" style={{display: "none"}}>
         <span>게임 수:</span>
         <span>{games}</span>
       </div>
       <div className="wallet">
-        <span>베팅 금액:</span>
-        <span>{games * prize} c4ei</span>
+        <span>베팅 코인수:</span>
+        <span>{games * prize} klay</span>
       </div>
-      <div className="money">
+      <div className="money" style={{display: "none"}}>
         <span>당첨금액:</span>
-        <span>{money} c4ei</span>
+        <span>{money} klay</span>
       </div>
     </section>
   );

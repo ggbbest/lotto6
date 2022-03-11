@@ -94,22 +94,29 @@ app.post('/api/setLotto', (req, res) => {
         num3: req.body.num3,
         num4: req.body.num4,
         num5: req.body.num5,
-        num6: req.body.num6
+        num6: req.body.num6,
+        sendTr: req.body.tx_hash
     };
     
     let _sql ="";
     _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ";
     _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
     _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
-    _sql =_sql + lottoNo.chips+" chips, '' addr, '' sendTr ";
+    _sql =_sql + lottoNo.chips+" chips, '' addr, '"+lottoNo.sendTr+"' sendTr ";
     _sql =_sql +",'"+numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
     _sql =_sql +"from dual; ";
 
-    console.log(_sql);
+    console.log(timestamp() +":"+_sql);
     dbCon.query(_sql, (err, data) => { if(!err) { res.send(lottoNo); } else { res.send(err); } });
     // courses.push(lottoNo);
     // res.send(lottoNo);
 });
+
+function timestamp(){ 
+    var today = new Date(); 
+    today.setHours(today.getHours() + 9); 
+    return today.toISOString().replace('T', ' ').substring(0, 19); 
+}
 
 // app.get('/api/setLotto/:id', (req, res) => {
     

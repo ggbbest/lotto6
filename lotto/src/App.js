@@ -9,6 +9,7 @@ import Display from "./Display";
 import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
+import { prepare, request, getResult } from 'klip-sdk'
 
 const App = () => {
   const numbers = [
@@ -67,7 +68,7 @@ const App = () => {
     }
   };
   // async
-  function saveLottoNum() {
+  function saveLottoNum(tx_hash) {
       // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
       const data = {
         chips: "1",
@@ -76,7 +77,8 @@ const App = () => {
         num3: playerNumbers[2],
         num4: playerNumbers[3],
         num5: playerNumbers[4],
-        num6: playerNumbers[5]
+        num6: playerNumbers[5],
+        tx_hash: tx_hash
       };
       // console.log(response);
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
@@ -96,10 +98,10 @@ const App = () => {
         drawedNumbers.push(optionNumbers[index]);
         optionNumbers.splice(index, 1);
       }
-      saveLottoNum();  // db save
-      setDrawedNumbers(drawedNumbers);
-      setGamesNumber((prevNumber) => prevNumber + 1);
-      checkWin(playerNumbers, drawedNumbers);
+      sendPrepareRequest();
+      // setDrawedNumbers(drawedNumbers);
+      // setGamesNumber((prevNumber) => prevNumber + 1);
+      // checkWin(playerNumbers, drawedNumbers);
     }
   };
 
@@ -112,6 +114,48 @@ const App = () => {
     setHits(0);
     setMoney(0);
   };
+///////////////////////////////////////////////////////////////////
+const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
+
+  const [step, setStep] = useState(SEND_REQUEST)
+
+  const to = '0x7C720ca152B43fa72a24eCcd51ccDAFBF74A884e'
+  const bappName = 'lotto'
+  const amount = '1'
+
+  const sendPrepareRequest = async () => {
+    const res = await prepare.sendKLAY({ bappName, to, amount })
+
+    if (res.request_key) {
+      setStep(SHOW_LOADING)
+      request(res.request_key)
+      startPollingResult(res.request_key)
+    }
+  }
+
+  const startPollingResult = (requestKey) => {
+    const id = setInterval(async () => {
+      const res = await getResult(requestKey)
+      if (res.status === 'completed') {
+        clearTimeout(id)
+        setStep(SHOW_RESULT)
+        if (res.result.status === 'success') {
+          saveLottoNum(res.result.tx_hash);  // db save
+        }else{
+          // error maybe ...
+        }
+      }
+    }, 1000);
+// "request_key": "0b0ee0ad-62b3-4146-980b-531b3201265d",
+// "expiration_time": 1600011054,
+// "status": "completed",
+// "result": {
+// "tx_hash": "0x82d018556e88b8f8f43dc2c725a683afc204bfd3c17230c41252354980f77fb3",
+// "status": "success"
+// }
+    // saveLottoNum();
+  }
+  ///////////////////////////////////////////////////////////////////
 /* eslint-disable */
   return (
     <div className="app">
@@ -125,6 +169,27 @@ const App = () => {
           <ButtonReset reset={resetGame} />
           <ButtonStart playerNumbers={playerNumbers} start={startDraw} />
         </section>
+        {/* //////////////// */}
+        {/* <div className='donate-page'>
+          {step === SEND_REQUEST &&
+            (<>
+              <div className='title'>1KLAY를<br /> 아래 주소로 후원</div>
+              <div className='address'>{to}</div>
+              <Button onClick={sendPrepareRequest}>KLAY 후원하기</Button>
+            </>)}
+          {step === SHOW_LOADING && (
+            <Spinner />
+          )}
+          {step === SHOW_RESULT && (
+            <div className='result'>
+              <img src="https://klipwallet.com/img/home-klip-user-guide-event.png" />
+              <div className='message'>
+                후원이 완료되었습니다!!
+              </div>
+            </div>
+          )}
+        </div> */}
+        {/* //////////////// */}
       </main>
     </div>
   );
