@@ -40,6 +40,12 @@ app.get('/lotto', function(req, res){
     res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
 
+
+var indexRouter = require('./routes/index');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use('/', indexRouter);
+
 //#########################################################################
 // app.get('/hello', (req, res) => {
 //     res.send({ hello : 'Hello react' });
@@ -57,7 +63,7 @@ app.get('/api/getLotto/:id', (req, res) => {
 })
 
 app.get('/api/week', (req, res) => {
-    dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw FROM DUAL;", (err, data) => {
+    dbCon.query("SELECT '1' id, concat( DATE_FORMAT(NOW(), '%Y') ,'_' ,WEEK(NOW()) ) as yyyyw, concat( DATE_FORMAT(NOW(), '%Y') ,'년' ,WEEK(NOW()),'주차' ) as yyyywkr FROM DUAL;", (err, data) => {
         if(!err)
         {
             res.header("Content-Type: application/json")
@@ -127,36 +133,35 @@ app.use(express.urlencoded({ extended: false })); // for parsing application/x-w
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.get('/getLotto/:id', (req, res) => {
-    let _yyyy       = "";
-    let _wk         = "";
-    let _regdate    = "";
-    let _chips      = "";
-    let _sendTr     = "";
-    let _numb_tot   = "";
-    let _sql = "SELECT yyyy,wk,regdate,chips,sendTr,numb_tot FROM lotto where sendTr='"+req.params.id+"'";
-    // console.log("######### server.js ######### "+_sql);
-    dbCon.query(_sql, function (err, rows, fields) {
-        if (err) {
-            // console.log('query is not excuted. select fail...\n' + err);
-        }
-        else {
-            // console.log("######### server.js ######### rows.length : "+rows.length);
-            if (rows.length > 0) {
-                _yyyy       = rows[0].yyyy;
-                _wk         = rows[0].wk;
-                _regdate    = rows[0].regdate;
-                _chips      = rows[0].chips;
-                _sendTr     = rows[0].sendTr;
-                _numb_tot   = rows[0].numb_tot;
-                console.log("######### server.js ######### _numb_tot : "+_numb_tot);
-            }
-        }
-    })
-    // console.log("######### server.js ######### "+_numb_tot);
-    res.render('vtr', { title: 'lotto number', yyyy:_yyyy, wk:_wk, regdate:_regdate, chips:_chips, sendTr : _sendTr, numb_tot : _numb_tot});
-})
-
+// app.get('/getLotto/:id', (req, res) => {
+//     let _yyyy       = "";
+//     let _wk         = "";
+//     let _regdate    = "";
+//     let _chips      = "";
+//     let _sendTr     = "";
+//     let _numb_tot   = "";
+//     let _sql = "SELECT yyyy,wk,regdate,chips,sendTr,numb_tot FROM lotto where sendTr='"+req.params.id+"'";
+//     // console.log("######### server.js ######### "+_sql);
+//     dbCon.query(_sql, function (err, rows, fields) {
+//         if (err) {
+//             // console.log('query is not excuted. select fail...\n' + err);
+//         }
+//         else {
+//             // console.log("######### server.js ######### rows.length : "+rows.length);
+//             if (rows.length > 0) {
+//                 _yyyy       = rows[0].yyyy;
+//                 _wk         = rows[0].wk;
+//                 _regdate    = rows[0].regdate;
+//                 _chips      = rows[0].chips;
+//                 _sendTr     = rows[0].sendTr;
+//                 _numb_tot   = rows[0].numb_tot;
+//                 console.log("######### server.js ######### _numb_tot : "+_numb_tot);
+//             }
+//         }
+//     })
+//     // console.log("######### server.js ######### "+_numb_tot);
+//     res.render('vtr', { title: 'lotto number', yyyy:_yyyy, wk:_wk, regdate:_regdate, chips:_chips, sendTr : _sendTr, numb_tot : _numb_tot});
+// })
 
 app.listen(PORT, () => {
     console.log(`Server On : http://localhost:${PORT}/`);
