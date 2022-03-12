@@ -18,9 +18,14 @@ var sync_mysql = require('sync-mysql'); //2020-01-28
 let sync_connection = new sync_mysql(db_config.constr());
 
 // /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
+router.get('/', function(req, res, next) {
+  let result = sync_connection.query("SELECT yyyy,wk,sum(chips) sum_chips FROM lotto where yyyy=YEAR(NOW()) and wk=WEEK(NOW())");
+  _yyyy       = result[0].yyyy;
+  _wk         = result[0].wk;
+  _sum_chips  = result[0].sum_chips;
+
+  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "sum_chips":_sum_chips });
+});
 
 //lottoNum
 router.get('/lottoNum/:id', function(req, res, next) {

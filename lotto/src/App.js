@@ -88,7 +88,8 @@ const App = () => {
       .then((res) => {
           console.log(res.data)
           // response.redirect('/getLotto/'+tx_hash)
-          document.writeln("https://c4ei.net/getLotto/"+tx_hash)
+          // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
+          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a></body></html>')
       }).catch((error) => {
           console.log(error)
       });

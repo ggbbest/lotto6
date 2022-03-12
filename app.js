@@ -120,12 +120,12 @@ function timestamp(){
   return today.toISOString().replace('T', ' ').substring(0, 19); 
 }
 //###############################################################
-app.use( '/', express.static( path.join(__dirname, 'public') ))
-app.use( '/lotto', express.static( path.join(__dirname, 'lotto/build') ))
+// app.use('/', express.static( path.join(__dirname, 'public') ))
+// app.get('/', function(req, res){
+//   res.sendFile( path.join(__dirname, 'public/main.html') )
+// }) 
 
-app.get('/', function(req, res){
-    res.sendFile( path.join(__dirname, 'public/main.html') )
-}) 
+app.use('/lotto', express.static( path.join(__dirname, 'lotto/build') ))
 app.get('/lotto', function(req, res){
     res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
