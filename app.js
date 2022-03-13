@@ -129,6 +129,12 @@ app.use('/lotto', express.static( path.join(__dirname, 'lotto/build') ))
 app.get('/lotto', function(req, res){
     res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
+
+app.use('/lotto2', express.static( path.join(__dirname, 'lotto2/build') ))
+app.get('/lotto2', function(req, res){
+    res.sendFile( path.join(__dirname, 'lotto2/build/index.html') )
+})
+
 //###############################################################
 
 // catch 404 and forward to error handler
