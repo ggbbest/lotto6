@@ -29,6 +29,7 @@ router.get('/', function(req, res, next) {
 });
 
 //lottoNum
+// https://lotto.c4ei.net/lottoNum/0x817b4b495bc86faee85cbb9c404e59471629e004d1d892714b0af19d2e909266
 router.get('/lottoNum/:id', function(req, res, next) {
   let _yyyy       = "";
   let _wk         = "";
