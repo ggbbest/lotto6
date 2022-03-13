@@ -171,8 +171,8 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
         <Coupon numbers={numbers} add={addPlayerNumbers} />
         <Results games={gamesNumber} hits={hits} money={money} />
         <section className="controls">
-          <ButtonReset reset={resetGame} />
           <ButtonStart playerNumbers={playerNumbers} start={startDraw} />
+          <ButtonReset reset={resetGame} />
           {/* <button onClick={() => window.open('https://c4ei.net/getLotto/{linkTR}', '_blank')}>transaction log</button> */}
         </section>
         {/* //////////////// */}
