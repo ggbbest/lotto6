@@ -10,6 +10,12 @@ import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
 
+///////////////////// metamask s ////////////////
+import {useWeb3React} from '@web3-react/core';
+import {injected} from './lib/connectors';
+///////////////////// metamask e ////////////////
+
+
 const App = () => {
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,
@@ -118,12 +124,43 @@ const App = () => {
     setMoney(0);
   };
 
+///////////////////// metamask s ////////////////
+const {
+  chainId,
+  account,
+  active,
+  activate,
+  deactivate
+} = useWeb3React();
+
+const handleConnect = () => {
+  if(active) {
+    deactivate();
+    return;
+  }
+
+  activate(injected,(error)=>{
+    if('/No Ethereum provider was found on window.ethereum/'.test(error)){
+      window.open('https://metamask.io/download.html');
+    }
+  });
+}
+///////////////////// metamask e ////////////////
+
+
 /* eslint-disable */
   return (
     <div className="app">
       <Header />
 
       <main>
+        <div>
+          <p>Account: {account}</p>
+          <p>ChainId: {chainId}</p>
+        </div>
+        <div>
+          <button type="button" onClick={handleConnect}>{active?'disconnect':'connect'}</button>
+        </div>
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
         <Results games={gamesNumber} hits={hits} money={money} />
@@ -135,5 +172,20 @@ const App = () => {
     </div>
   );
 };
+
+// function getLibrary(provider) {
+//   const library = new Web3Provider(provider, "any");
+//   return library;
+// }
+// ​
+// const rootElement = document.getElementById("root");
+// ReactDOM.render(
+//   <StrictMode>
+//     <Web3ReactProvider getLibrary={getLibrary}>
+//       <App />
+//     </Web3ReactProvider>
+//   </StrictMode>,
+//   rootElement
+// );
 
 export default App;

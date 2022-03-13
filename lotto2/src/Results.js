@@ -12,7 +12,7 @@ const Results = ({ games, hits, money }) => {
       </div>
       <div className="wallet">
         <span>베팅 코인수:</span>
-        <span>1 klay</span>
+        <span>1 C4EI</span>
       </div>
       <div className="money" style={{display: "none"}}>
         <span>당첨금액:</span>
