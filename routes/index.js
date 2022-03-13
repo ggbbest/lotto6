@@ -19,11 +19,12 @@ let sync_connection = new sync_mysql(db_config.constr());
 
 // /* GET home page. */
 router.get('/', function(req, res, next) {
-  let result = sync_connection.query("SELECT yyyy,wk,sum(chips) sum_chips FROM lotto where yyyy=YEAR(NOW()) and wk=WEEK(NOW())");
+  let sql = "SELECT IFNULL(yyyy,YEAR(NOW())) AS yyyy, IFNULL(wk,WEEK(NOW())) AS wk, IFNULL(sum(chips),0) AS sum_chips FROM lotto where yyyy=YEAR(NOW()) and wk=WEEK(NOW())";
+  let result = sync_connection.query(sql);
   _yyyy       = result[0].yyyy;
   _wk         = result[0].wk;
   _sum_chips  = result[0].sum_chips;
-
+  console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / _sum_chips : "+_sum_chips);
   res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "sum_chips":_sum_chips });
 });
 
