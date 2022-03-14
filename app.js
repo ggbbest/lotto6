@@ -90,6 +90,7 @@ app.post('/api/setLotto', (req, res) => {
       // id: lottoNo.length + 1,
       chips: req.body.chips,
       chainId: req.body.chainId,
+      coin_name: req.body.coin_name,
       addr: req.body.addr,
       // numb_tot: req.body.numb_tot,
       num1: req.body.num1,
@@ -105,7 +106,7 @@ app.post('/api/setLotto', (req, res) => {
   _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`chainId`,`addr`,`sendTr` ";
   _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
   _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
-  _sql =_sql + lottoNo.chips+" chips,'"+lottoNo.chainId+"' chainId,'"+lottoNo.addr+"' addr, '"+lottoNo.sendTr+"' sendTr ";
+  _sql =_sql + lottoNo.chips+" chips,'"+lottoNo.chainId+"' chainId,'"+lottoNo.coin_name+"' coin_name,'"+lottoNo.addr+"' addr, '"+lottoNo.sendTr+"' sendTr ";
   _sql =_sql +",'"+numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
   _sql =_sql +"from dual; ";
 

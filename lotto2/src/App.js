@@ -131,6 +131,7 @@ const App = () => {
         num6: playerNumbers[5],
         addr: account,
         chainId : chainId,
+        coin_name : "C4EI",
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)
