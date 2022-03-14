@@ -80,6 +80,8 @@ const App = () => {
         num4: playerNumbers[3],
         num5: playerNumbers[4],
         num6: playerNumbers[5],
+        addr: "",
+        chainId : "8217",
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)

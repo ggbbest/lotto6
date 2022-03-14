@@ -14,7 +14,8 @@ import axios from 'axios';
 import {useWeb3React} from '@web3-react/core';
 import {injected} from './lib/connectors';
 ///////////////////// metamask e ////////////////
-
+// import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
+//yarn add web3
 
 const App = () => {
   const numbers = [
@@ -73,7 +74,43 @@ const App = () => {
       setMoney((prev) => prev + awards.six);
     }
   };
-  // async
+  
+  async function sendTr(send_account){
+    console.log("############ 79 /lotto2/src/App.js"+send_account+":send_account");
+    var Web3 = require('web3');
+    // var web3 = new Web3(new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws'));
+    let web3; //= new Web3(Web3.curentProvider);
+    if(window.ethereum){
+      web3 = new Web3(window.ethereum);
+    }else{
+      web3 = new Web3(window.ethereum);
+    }
+    require('dotenv').config();
+    const myAddress = '0x610Ae88399fc1687FA7530Aac28eC2539c7d6d63' //TODO: replace this address with your own public address
+    const nonce = await web3.eth.getTransactionCount(myAddress, 'latest'); // nonce starts counting from 0
+    console.log("############ 91 /lotto2/src/App.js ");
+    const transaction = {
+      'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
+      'value': web3.utils.toHex(web3.utils.toWei('1', 'ether')),
+      'gas': 30000,
+      'maxFeePerGas': 1000000108,
+      'nonce': nonce,
+      // optional data field to send message or execute smart contract
+    };
+    console.log("############ 100 /lotto2/src/App.js ");
+    const signedTx = await web3.eth.accounts.signTransaction(transaction, process.env.PRIVATE_KEY);
+    console.log("############ 102 /lotto2/src/App.js ");
+    web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(error, hash) {
+      if (!error) {
+        saveLottoNum(hash);
+        console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+      } else {
+        console.log("❗Something went wrong while submitting your transaction:", error)
+      }
+    });
+    console.log("############ 111 /lotto2/src/App.js ");
+  }
+
   function saveLottoNum(tx_hash) {
       // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
       const data = {
@@ -84,6 +121,8 @@ const App = () => {
         num4: playerNumbers[3],
         num5: playerNumbers[4],
         num6: playerNumbers[5],
+        addr: account,
+        chainId : chainId,
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)
@@ -108,9 +147,10 @@ const App = () => {
         drawedNumbers.push(optionNumbers[index]);
         optionNumbers.splice(index, 1);
       }
-      setDrawedNumbers(drawedNumbers);
-      setGamesNumber((prevNumber) => prevNumber + 1);
-      checkWin(playerNumbers, drawedNumbers);
+      sendTr(account);
+      // setDrawedNumbers(drawedNumbers);
+      // setGamesNumber((prevNumber) => prevNumber + 1);
+      // checkWin(playerNumbers, drawedNumbers);
     }
   };
 
@@ -172,20 +212,5 @@ const handleConnect = () => {
     </div>
   );
 };
-
-// function getLibrary(provider) {
-//   const library = new Web3Provider(provider, "any");
-//   return library;
-// }
-// ​
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(
-//   <StrictMode>
-//     <Web3ReactProvider getLibrary={getLibrary}>
-//       <App />
-//     </Web3ReactProvider>
-//   </StrictMode>,
-//   rootElement
-// );
 
 export default App;

@@ -89,7 +89,8 @@ app.post('/api/setLotto', (req, res) => {
   const lottoNo = {
       // id: lottoNo.length + 1,
       chips: req.body.chips,
-      // addr: req.body.addr,
+      chainId: req.body.chainId,
+      addr: req.body.addr,
       // numb_tot: req.body.numb_tot,
       num1: req.body.num1,
       num2: req.body.num2,
@@ -101,10 +102,10 @@ app.post('/api/setLotto', (req, res) => {
   };
   
   let _sql ="";
-  _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`addr`,`sendTr` ";
+  _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`chainId`,`addr`,`sendTr` ";
   _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
   _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
-  _sql =_sql + lottoNo.chips+" chips, '' addr, '"+lottoNo.sendTr+"' sendTr ";
+  _sql =_sql + lottoNo.chips+" chips,'"+lottoNo.chainId+"' chainId,'"+lottoNo.addr+"' addr, '"+lottoNo.sendTr+"' sendTr ";
   _sql =_sql +",'"+numb_tot+"','"+lottoNo.num1+"','"+lottoNo.num2+"','"+lottoNo.num3+"','"+lottoNo.num4+"','"+lottoNo.num5+"','"+lottoNo.num6+"' ";
   _sql =_sql +"from dual; ";
 
