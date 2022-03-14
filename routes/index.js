@@ -20,21 +20,22 @@ let sync_connection = new sync_mysql(db_config.constr());
 // /* GET home page. */
 router.get('/', function(req, res, next) {
   let sql = "";
-  sql = sql +"SELECT yyyy, wk, sum(klay_sum_chips) klay_sum_chips, sum(c4ei_sum_chips) c4ei_sum_chips FROM ( ";
+  sql = sql +"SELECT yyyy, wk, sum(klay_sum_chips) klay_sum_chips, sum(c4ei_sum_chips) c4ei_sum_chips, sum(ceik_sum_chips) ceik_sum_chips FROM ( ";
   sql = sql +"SELECT IFNULL(yyyy,YEAR(NOW())) AS yyyy, IFNULL(wk,WEEK(NOW())) AS wk, ";
-  sql = sql +"CASE WHEN coin_name = 'KLAY' THEN IFNULL(sum(chips),0) ELSE 0 END AS klay_sum_chips ,  ";
-  sql = sql +"CASE WHEN coin_name = 'C4EI' THEN IFNULL(sum(chips),0) ELSE 0 END AS c4ei_sum_chips  ";
+  sql = sql +"CASE WHEN coin_name = 'KLAY' THEN IFNULL(sum(chips),0) ELSE 0 END AS klay_sum_chips,  ";
+  sql = sql +"CASE WHEN coin_name = 'C4EI' THEN IFNULL(sum(chips),0) ELSE 0 END AS c4ei_sum_chips,  ";
+  sql = sql +"CASE WHEN coin_name = 'CEIK' THEN IFNULL(sum(chips),0) ELSE 0 END AS ceik_sum_chips   ";
   sql = sql +"FROM lotto  where yyyy=YEAR(NOW()) and wk=WEEK(NOW()) ";
-  sql = sql +"GROUP BY coin_name ";
-  sql = sql +") ds ";
+  sql = sql +"GROUP BY coin_name ) ds ";
   sql = sql +"GROUP BY yyyy, wk ";
   let result = sync_connection.query(sql);
   let _yyyy       = result[0].yyyy;
   let _wk         = result[0].wk;
   let _c4ei_sum_chips  = result[0].c4ei_sum_chips;
   let _klay_sum_chips  = result[0].klay_sum_chips;
+  let _ceik_sum_chips  = result[0].ceik_sum_chips;
   // console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
-  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips });
+  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips , "ceik_sum_chips":_ceik_sum_chips });
 });
 
 //lottoNum
