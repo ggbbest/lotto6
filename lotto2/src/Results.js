@@ -1,6 +1,6 @@
 import React from "react";
 
-const Results = ({ games, hits, money }) => {
+const Results = ({ games, hits, money , chips }) => {
   // const prize = 1;
   const information = hits ? `${hits}개 맞음` : "0개 맞음";
   return (
@@ -11,8 +11,6 @@ const Results = ({ games, hits, money }) => {
         <span>{games}</span>
       </div>
       <div className="wallet">
-        <span>베팅 코인수:</span>
-        <span>1 C4EI</span>
       </div>
       <div className="money" style={{display: "none"}}>
         <span>당첨금액:</span>

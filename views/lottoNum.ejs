@@ -51,19 +51,31 @@
               </tr>
               <tr>
                 <td  style="text-align: left;width:90px">선택번호</td>
-                <td ><%= numb_tot %></td>
+                <td style="text-align: left;"> <%= numb_tot %></td>
               </tr>
               <tr>
                 <td  style="text-align: left;width:90px">구매일시</td>
-                <td ><%=regdate%></td>
+                <td style="text-align: left;"> <%=regdate.replace('T',' ').replace('Z','')%></td>
+              </tr>
+              <tr>
+                <td  style="text-align: left;width:90px">주소</td>
+                <td style="text-align: left;"> %=addr%></td>
+              </tr>
+              <tr>
+                <td  style="text-align: left;width:90px">chainId</td>
+                <td style="text-align: left;"> <%=chainId%></td>
               </tr>
               <tr>
                 <td  style="text-align: left;width:90px">구매수량</td>
-                <td ><%=chips%> KLAY </td>
+                <td style="text-align: left;"> <%=chips%> <%=coin_name%> </td>
               </tr>
               <tr>
                 <td  style="text-align: left;width:90px">트랜젝션ID</td>
-                <td style="word-break: break-all;"><a href="https://scope.klaytn.com/tx/<%=sendTr%>" target="_blank"><%=sendTr%></a></td>
+                <td style="text-align: left;word-break: break-all;">
+                  <% if (chainId=="8217") { %> <a href="https://scope.klaytn.com/tx/<%=sendTr%>" target="_blank">
+                  <% }else{ %> <a href="https://exp.c4ei.net/tx/<%=sendTr%>" target="_blank">
+                  <% }%>
+                    <%=sendTr%></a></td>
               </tr>
               <tr>
                 <td colspan="2" style="height: 20px;">  </td>

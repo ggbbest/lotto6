@@ -37,17 +37,20 @@ router.get('/lottoNum/:id', function(req, res, next) {
   let _chips      = "";
   let _sendTr     = "";
   let _numb_tot   = "";
-  let result = sync_connection.query("SELECT yyyy,wk,regdate,chips,sendTr,numb_tot FROM lotto where sendTr='"+req.params.id+"'");
+  let result = sync_connection.query("SELECT yyyy,wk,regdate,chips,chainId,coin_name,addr,sendTr,numb_tot FROM lotto where sendTr='"+req.params.id+"'");
   _yyyy       = result[0].yyyy;
   _wk         = result[0].wk;
   _regdate    = result[0].regdate;
   _chips      = result[0].chips;
+  _chainId    = result[0].chainId;
+  _coin_name  = result[0].coin_name;
+  _addr       = result[0].addr;
   _sendTr     = result[0].sendTr;
   _numb_tot   = result[0].numb_tot;
   console.log("######### server.js ######### "+timestamp()+" _numb_tot : "+_numb_tot);
   
   // console.log("######### server.js ######### "+_numb_tot);
-  res.render('lottoNum', { title: 'lotto number', "yyyy":_yyyy, "wk":_wk, "regdate":_regdate, "chips":_chips, "sendTr": _sendTr, "numb_tot" : _numb_tot });
+  res.render('lottoNum', { title: 'lotto number', "yyyy":_yyyy, "wk":_wk, "regdate":_regdate, "chips":_chips,"chainId":_chainId, "coin_name":_coin_name, "addr":_addr, "sendTr": _sendTr, "numb_tot" : _numb_tot });
 });
 
 function timestamp(){ 

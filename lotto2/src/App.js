@@ -17,15 +17,29 @@ import {injected} from './lib/connectors';
 // import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
 //yarn add web3
 import { useAlert } from 'react-alert'
+// import Select from 'react-select'
+//yarn remove react-select
+// const options = [
+// { value: '1', label: '1' },
+// { value: '2', label: '2' },
+// { value: '3', label: '3' },
+// { value: '4', label: '4' },
+// { value: '5', label: '5' },
+// { value: '10', label: '10' },
+// { value: '20', label: '20' },
+// { value: '50', label: '50' },
+// { value: '100', label: '100' },
+// { value: '500', label: '500' },
+// { value: '1000', label: '1000' }
+// ]
 
 
 const dotenv = require('dotenv');
 dotenv.config();
 
 const App = () => {
-  const alert = useAlert()
-
-
+  const alert = useAlert();
+  // const mkSel = betChip();
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,
     11,12,13,14,15,16,17,18,19,20,
@@ -42,7 +56,13 @@ const App = () => {
   const [hits, setHits] = useState(0);
   const [money, setMoney] = useState(0);
   // const [linkTR, setlinkTR] = useState(0);
+  // const [chips, setchips] = useState(0);
+  // chips = 1;
+  // const betChipChg = () => {
+  //   setchips(betChip.value)
+  // }
 
+  
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
       const numbers = [...playerNumbers];
@@ -178,20 +198,9 @@ const App = () => {
   };
 
 ///////////////////// metamask s ////////////////
-const {
-  chainId,
-  account,
-  active,
-  activate,
-  deactivate
-} = useWeb3React();
-
+const { chainId, account, active, activate, deactivate } = useWeb3React();
 const handleConnect = () => {
-  if(active) {
-    deactivate();
-    return;
-  }
-
+  if(active) { deactivate(); return; }
   activate(injected,(error)=>{
     if('/No Ethereum provider was found on window.ethereum/'.test(error)){
       window.open('https://metamask.io/download.html');
@@ -216,6 +225,25 @@ const handleConnect = () => {
         </div>
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
+        <div>
+        <span>베팅 코인수:</span>
+        <span>
+        {/* yarn add react-select */}
+          {/* <select defaultValue='1' name="betChip" id="betChip" onChange={betChipChg}>
+            <option value='1'> 1</option>
+            <option value='2'> 2</option>
+            <option value='3'> 3</option>
+            <option value='4'> 4</option>
+            <option value='5'> 5</option>
+            <option value='10'>10</option>
+            <option value='50'>50</option>
+            <option value='100'>100</option>
+            <option value='500'>500</option>
+            <option value='1000'>1000</option>
+          </select> */}
+          {(chainId=="8217")?"KLAY":"C4EI"}
+        </span>
+        </div>
         <Results games={gamesNumber} hits={hits} money={money} />
         <section className="controls">
           <ButtonStart playerNumbers={playerNumbers} start={startDraw} />
