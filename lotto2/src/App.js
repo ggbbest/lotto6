@@ -17,21 +17,6 @@ import {injected} from './lib/connectors';
 // import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
 //yarn add web3
 import { useAlert } from 'react-alert'
-// import Select from 'react-select'
-//yarn remove react-select
-// const options = [
-// { value: '1', label: '1' },
-// { value: '2', label: '2' },
-// { value: '3', label: '3' },
-// { value: '4', label: '4' },
-// { value: '5', label: '5' },
-// { value: '10', label: '10' },
-// { value: '20', label: '20' },
-// { value: '50', label: '50' },
-// { value: '100', label: '100' },
-// { value: '500', label: '500' },
-// { value: '1000', label: '1000' }
-// ]
 
 
 const dotenv = require('dotenv');
@@ -55,13 +40,13 @@ const App = () => {
   const [gamesNumber, setGamesNumber] = useState(0);
   const [hits, setHits] = useState(0);
   const [money, setMoney] = useState(0);
-  // const [linkTR, setlinkTR] = useState(0);
-  // const [chips, setchips] = useState(0);
-  // chips = 1;
-  // const betChipChg = () => {
-  //   setchips(betChip.value)
-  // }
-
+  //////////////////////////////////////////////////////
+  const selectListChip = ["1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
+  const [SelectedChip, setSelectedChip] = useState("");
+  const handleSelectChip = (e) => {
+    setSelectedChip(e.target.value);
+  };
+  //////////////////////////////////////////////////////
   
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
@@ -142,7 +127,7 @@ const App = () => {
   function saveLottoNum(tx_hash) {
       // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
       const data = {
-        chips: "1",
+        chips: SelectedChip,
         num1: playerNumbers[0],
         num2: playerNumbers[1],
         num3: playerNumbers[2],
@@ -228,19 +213,13 @@ const handleConnect = () => {
         <div>
         <span>베팅 코인수:</span>
         <span>
-        {/* yarn add react-select */}
-          {/* <select defaultValue='1' name="betChip" id="betChip" onChange={betChipChg}>
-            <option value='1'> 1</option>
-            <option value='2'> 2</option>
-            <option value='3'> 3</option>
-            <option value='4'> 4</option>
-            <option value='5'> 5</option>
-            <option value='10'>10</option>
-            <option value='50'>50</option>
-            <option value='100'>100</option>
-            <option value='500'>500</option>
-            <option value='1000'>1000</option>
-          </select> */}
+        <select onChange={handleSelectChip} value={SelectedChip}>
+          {selectListChip.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </select>
           {(chainId=="8217")?"KLAY":"C4EI"}
         </span>
         </div>

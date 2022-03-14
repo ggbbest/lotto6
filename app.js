@@ -103,7 +103,7 @@ app.post('/api/setLotto', (req, res) => {
   };
   
   let _sql ="";
-  _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`chainId`,`addr`,`sendTr` ";
+  _sql =_sql +"insert into `lotto` (`yyyy`,`wk`,`yyyymmdd`,`chips`,`chainId`,`coin_name`,`addr`,`sendTr` ";
   _sql =_sql +",`numb_tot`,`numb1`,`numb2`,`numb3`,`numb4`,`numb5`,`numb6`) ";
   _sql =_sql +"select YEAR(NOW()), WEEK(NOW()), DATE_FORMAT(NOW(), '%Y%m%d'), ";
   _sql =_sql + lottoNo.chips+" chips,'"+lottoNo.chainId+"' chainId,'"+lottoNo.coin_name+"' coin_name,'"+lottoNo.addr+"' addr, '"+lottoNo.sendTr+"' sendTr ";

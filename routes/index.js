@@ -19,13 +19,14 @@ let sync_connection = new sync_mysql(db_config.constr());
 
 // /* GET home page. */
 router.get('/', function(req, res, next) {
-  let sql = "SELECT IFNULL(yyyy,YEAR(NOW())) AS yyyy, IFNULL(wk,WEEK(NOW())) AS wk, IFNULL(sum(chips),0) AS sum_chips FROM lotto where yyyy=YEAR(NOW()) and wk=WEEK(NOW())";
+  let sql = "SELECT IFNULL(yyyy,YEAR(NOW())) AS yyyy, IFNULL(wk,WEEK(NOW())) AS wk, IFNULL(sum(chips),0) AS sum_chips, coin_name FROM lotto where yyyy=YEAR(NOW()) and wk=WEEK(NOW()) GROUP BY coin_name ORDER BY coin_name";
   let result = sync_connection.query(sql);
   _yyyy       = result[0].yyyy;
   _wk         = result[0].wk;
-  _sum_chips  = result[0].sum_chips;
-  console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / _sum_chips : "+_sum_chips);
-  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "sum_chips":_sum_chips });
+  _c4ei_sum_chips  = result[0].sum_chips;
+  _klay_sum_chips  = result[1].sum_chips;
+  console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
+  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips });
 });
 
 //lottoNum
