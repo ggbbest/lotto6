@@ -16,8 +16,16 @@ import {injected} from './lib/connectors';
 ///////////////////// metamask e ////////////////
 // import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
 //yarn add web3
+import { useAlert } from 'react-alert'
+
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 const App = () => {
+  const alert = useAlert()
+
+
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,
     11,12,13,14,15,16,17,18,19,20,
@@ -85,20 +93,20 @@ const App = () => {
     }else{
       web3 = new Web3(window.ethereum);
     }
-    require('dotenv').config();
     const myAddress = '0x610Ae88399fc1687FA7530Aac28eC2539c7d6d63' //TODO: replace this address with your own public address
     const nonce = await web3.eth.getTransactionCount(myAddress, 'latest'); // nonce starts counting from 0
-    console.log("############ 91 /lotto2/src/App.js ");
+    let saveData = playerNumbers[0]+","+playerNumbers[1]+","+playerNumbers[2]+","+playerNumbers[3]+","+playerNumbers[4]+","+playerNumbers[5];
+    console.log("############ 91 /lotto2/src/App.js "+saveData+" : saveData");
     const transaction = {
       'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
       'value': web3.utils.toHex(web3.utils.toWei('1', 'ether')),
       'gas': 30000,
-      'maxFeePerGas': 1000000108,
-      'nonce': nonce,
+      // 'maxFeePerGas': 1000000108, --> error occ
+      // 'nonce': nonce,
       // optional data field to send message or execute smart contract
+      'data': web3.utils.toHex(saveData)
     };
-    console.log("############ 100 /lotto2/src/App.js ");
-    const signedTx = await web3.eth.accounts.signTransaction(transaction, process.env.PRIVATE_KEY);
+    const signedTx = await web3.eth.accounts.signTransaction(transaction, process.env.REACT_APP_PK);
     console.log("############ 102 /lotto2/src/App.js ");
     web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(error, hash) {
       if (!error) {
@@ -137,8 +145,12 @@ const App = () => {
           console.log(error)
       });
   }
-
+  //yarn add react-alert
   const startDraw = () => {
+    if(account===undefined){
+      alert.show('Metamask Login First !!!')
+      return;
+    }
     if (playerNumbers.length === 6) {
       const optionNumbers = [...numbers];
       const drawedNumbers = [];
