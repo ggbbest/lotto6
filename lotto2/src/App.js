@@ -131,7 +131,6 @@ const App = () => {
     }else{
       web3 = new Web3(window.ethereum);
     }
-<<<<<<< HEAD
     // const myAddress = '0x610Ae88399fc1687FA7530Aac28eC2539c7d6d63' //TODO: replace this address with your own public address
     // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
     let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
@@ -140,16 +139,6 @@ const App = () => {
       'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
       'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
       'gas': 30000,
-=======
-
-    // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
-    let saveData = playerNumbers[0]+","+playerNumbers[1]+","+playerNumbers[2]+","+playerNumbers[3]+","+playerNumbers[4]+","+playerNumbers[5];
-    console.log("############ 111 /lotto2/src/App.js "+saveData+" : saveData");
-    const transaction = {
-      'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
-      'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
-      'gas': 3000000,
->>>>>>> 6a190a6725b84969fb687795a8fa0c00dbc97d94
       // 'maxFeePerGas': 1000000108, --> error occ
       // 'nonce': nonce,
       // optional data field to send message or execute smart contract
