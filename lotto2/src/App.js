@@ -17,7 +17,14 @@ import {injected} from './lib/connectors';
 // import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
 //yarn add web3
 import { useAlert } from 'react-alert'
-
+//yarn remove reactjs-popup
+// import Popup from 'reactjs-popup';
+// import 'reactjs-popup/dist/index.css';
+// export default () => (
+//   <Popup trigger={<button> Trigger</button>} position="right center">
+//     <div>Popup content here !!</div>
+//   </Popup>
+// );
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -111,7 +118,11 @@ const App = () => {
   // }
 
   async function sendTr(send_account){
+<<<<<<< HEAD
     console.log("############ 92 /lotto2/src/App.js"+send_account+":send_account");
+=======
+    console.log("############ 99 /lotto2/src/App.js"+send_account+":send_account");
+>>>>>>> 6a190a6725b84969fb687795a8fa0c00dbc97d94
     var Web3 = require('web3');
     // var web3 = new Web3(new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws'));
     let web3; //= new Web3(Web3.curentProvider);
@@ -120,6 +131,7 @@ const App = () => {
     }else{
       web3 = new Web3(window.ethereum);
     }
+<<<<<<< HEAD
     // const myAddress = '0x610Ae88399fc1687FA7530Aac28eC2539c7d6d63' //TODO: replace this address with your own public address
     // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
     let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
@@ -128,6 +140,16 @@ const App = () => {
       'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
       'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
       'gas': 30000,
+=======
+
+    // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
+    let saveData = playerNumbers[0]+","+playerNumbers[1]+","+playerNumbers[2]+","+playerNumbers[3]+","+playerNumbers[4]+","+playerNumbers[5];
+    console.log("############ 111 /lotto2/src/App.js "+saveData+" : saveData");
+    const transaction = {
+      'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
+      'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
+      'gas': 3000000,
+>>>>>>> 6a190a6725b84969fb687795a8fa0c00dbc97d94
       // 'maxFeePerGas': 1000000108, --> error occ
       // 'nonce': nonce,
       // optional data field to send message or execute smart contract
@@ -143,7 +165,7 @@ const App = () => {
         console.log("❗Something went wrong while submitting your transaction:", error)
       }
     });
-    console.log("############ 111 /lotto2/src/App.js ");
+    // console.log("############ 111 /lotto2/src/App.js ");
   }
 
   function saveLottoNum(tx_hash) {
@@ -168,7 +190,7 @@ const App = () => {
           console.log(res.data)
           // response.redirect('/getLotto/'+tx_hash)
           // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
-          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a></body></html>')
+          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
       }).catch((error) => {
           console.log(error)
       });
@@ -221,7 +243,6 @@ const handleConnect = () => {
   return (
     <div className="app">
       <Header />
-
       <main>
         <div>
           <p>Account: {account}</p>
@@ -236,11 +257,7 @@ const handleConnect = () => {
         <span>베팅 코인수:</span>
         <span>
         <select onChange={handleSelectChip} value={SelectedChip}>
-          {selectListChip.map((item) => (
-            <option value={item} key={item}>
-              {item}
-            </option>
-          ))}
+          {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
         </select>
           {(chainId=="8217")?"KLAY":"C4EI"}
         </span>
