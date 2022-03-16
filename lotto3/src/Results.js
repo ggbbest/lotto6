@@ -14,7 +14,7 @@ const Results = ({ games, hits, money , chips }) => {
       </div>
       <div className="money" style={{display: "none"}}>
         <span>당첨금액:</span>
-        <span>{money} C4EI</span>
+        <span>{money} CEIK</span>
       </div>
     </section>
   );
