@@ -13,10 +13,12 @@ import axios from 'axios';
 ///////////////////// metamask s ////////////////
 import {useWeb3React} from '@web3-react/core';
 import {injected} from './lib/connectors';
+// import detectEthereumProvider from '@metamask/detect-provider'
 ///////////////////// metamask e ////////////////
 // import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
 //yarn add web3
 import { useAlert } from 'react-alert'
+// import { json } from "express/lib/response";
 //yarn remove reactjs-popup
 // import Popup from 'reactjs-popup';
 // import 'reactjs-popup/dist/index.css';
@@ -50,10 +52,9 @@ const App = () => {
   //////////////////////////////////////////////////////
   const selectListChip = ["1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
   const [SelectedChip, setSelectedChip] = useState("");
-  const handleSelectChip = (e) => {
-    setSelectedChip(e.target.value);
-  };
-  //////////////////////////////////////////////////////
+  const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
+  // setSelectedChip("1");
+   //////////////////////////////////////////////////////
   
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
@@ -96,71 +97,90 @@ const App = () => {
   };
   
   // function sendEth(fromAddress, secret, toAddress, amount) {
-  //   let params = {
-  //     to: toAddress,
-  //     from: fromAddress,
-  //     value: web3.utils.toWei(amount + '', 'ether')
-  //   };
-  //   console.log(params);
-  
-  //   return Promise.all([web3.eth.estimateGas(params), web3.eth.getGasPrice()])
-  //     .then((response) => {
-  //       const estimatedGas = response[0];
-  //       const gasPrice = response[1];
-  //       params.gas = estimatedGas;
-  //       params.gasPrice = web3.utils.toBN(gasPrice).mul(web3.utils.toBN(11)).div(web3.utils.toBN(10));  // gasPrice * 1.1
-  //       params.value = web3.utils.toBN(params.value).sub(web3.utils.toBN(params.gas).mul(web3.utils.toBN(params.gasPrice)));     // value - (gas * gasPrice)
-  //       return web3.eth.accounts.signTransaction(params, secret);
-  //     })
-  //     .then((signedTx) => {
-  //       return web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  //     });
-  // }
-
-  async function sendTr(send_account){
-<<<<<<< HEAD
-    console.log("############ 92 /lotto2/src/App.js"+send_account+":send_account");
-=======
-    console.log("############ 99 /lotto2/src/App.js"+send_account+":send_account");
->>>>>>> 6a190a6725b84969fb687795a8fa0c00dbc97d94
+  function sendEth(send_account,send_amt) {
+    if(send_amt===undefined||send_amt===""){send_amt=1;}
+    console.log("############ 100 /lotto2/src/App.js "+send_account+":send_account");
     var Web3 = require('web3');
-    // var web3 = new Web3(new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws'));
-    let web3; //= new Web3(Web3.curentProvider);
-    if(window.ethereum){
-      web3 = new Web3(Web3.curentProvider);
-    }else{
-      web3 = new Web3(window.ethereum);
-    }
-    // const myAddress = '0x610Ae88399fc1687FA7530Aac28eC2539c7d6d63' //TODO: replace this address with your own public address
-    // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
+    let web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.c4ei.net/'));
+    // if(window.ethereum){ 
+    //   web3 = new Web3(Web3.curentProvider);
+    //   console.log("############ 106 Web3.curentProvider");
+    // }else{ 
+    //   web3 = new Web3(window.ethereum); 
+    //   console.log("############ 109 window.ethereum");
+    // }
+    // const provider = detectEthereumProvider(); //yarn add @metamask/detect-provider   //yarn remove @metamask/detect-provider
     let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
-    console.log("############ 104 /lotto2/src/App.js "+saveData+" : saveData");
-    const transaction = {
-      'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
-      'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
-      'gas': 30000,
-      // 'maxFeePerGas': 1000000108, --> error occ
-      // 'nonce': nonce,
-      // optional data field to send message or execute smart contract
-      'data': web3.utils.toHex(saveData)
+    console.log("############ 114 /lotto2/src/App.js "+saveData+":saveData/"+SelectedChip+":SelectedChip/"+send_amt+":send_amt/");
+    let params = {
+      // to: toAddress,
+      // value: web3.utils.toWei(amount + '', 'ether'),
+      to: '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D' //charlie swap.c4ei.net
+      ,from: send_account
+      ,value: web3.utils.toWei(send_amt + '', 'ether')
+      ,data: web3.utils.toHex(saveData)
     };
-    const signedTx = await web3.eth.accounts.signTransaction(transaction, process.env.REACT_APP_PK);
-    // console.log("############ 102 /lotto2/src/App.js ");
-    web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(error, hash) {
-      if (!error) {
-        saveLottoNum(hash);
-        console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
-      } else {
-        console.log("❗Something went wrong while submitting your transaction:", error)
-      }
-    });
-    // console.log("############ 111 /lotto2/src/App.js ");
+    // console.log("############ 124 /lotto2/src/App.js "+params+":params");
+    return Promise.all([web3.eth.estimateGas(params), web3.eth.getGasPrice()])
+      .then((response) => {
+        const estimatedGas = response[0];
+        const gasPrice = response[1];
+        console.log("############ 128 /lotto2/src/App.js "+gasPrice+":gasPrice");
+        params.gas = estimatedGas;
+        params.gasPrice = web3.utils.toBN(gasPrice).mul(web3.utils.toBN(11)).div(web3.utils.toBN(10));  // gasPrice * 1.1
+        params.value = web3.utils.toBN(params.value).sub(web3.utils.toBN(params.gas).mul(web3.utils.toBN(params.gasPrice)));     // value - (gas * gasPrice)
+        return web3.eth.accounts.signTransaction(params, process.env.REACT_APP_PK);
+      })
+      .then((signedTx) => {
+        // saveLottoNum(signedTx.rawTransaction);
+        // return web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+        return web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(error, hash) {
+          if (!error) {
+            saveLottoNum(hash , send_amt);
+            console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+          } else {
+            console.log("❗Something went wrong while submitting your transaction:", error)
+          }
+        });
+        // return hash;
+      });
   }
 
-  function saveLottoNum(tx_hash) {
-      // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
+  // async function sendTr(send_account){
+  //   console.log("############ 121 /lotto2/src/App.js"+send_account+":send_account");
+  //   var Web3 = require('web3');
+  //   let web3; //= new Web3(Web3.curentProvider);
+  //   if(window.ethereum){
+  //     web3 = new Web3(Web3.curentProvider);
+  //   }else{
+  //     web3 = new Web3(window.ethereum);
+  //   }
+  //   // const nonce = await web3.eth.getTransactionCount(send_account, 'latest'); // nonce starts counting from 0
+  //   let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
+  //   console.log("############ 104 /lotto2/src/App.js "+saveData+" : saveData");
+  //   const transaction = {
+  //     'to': '0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D', //charlie swap.c4ei.net
+  //     'value': web3.utils.toHex(web3.utils.toWei(SelectedChip, 'ether')),
+  //     'gas': 30000,
+  //     'data': web3.utils.toHex(saveData)
+  //   };
+  //   const signedTx = await web3.eth.accounts.signTransaction(transaction, process.env.REACT_APP_PK);
+  //   // console.log("############ 102 /lotto2/src/App.js ");
+  //   web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(error, hash) {
+  //     if (!error) {
+  //       saveLottoNum(hash);
+  //       console.log("🎉 The hash of your transaction is: ", hash, "\n Check Alchemy's Mempool to view the status of your transaction!");
+  //     } else {
+  //       console.log("❗Something went wrong while submitting your transaction:", error)
+  //     }
+  //   });
+  //   // console.log("############ 111 /lotto2/src/App.js ");
+  // }
+
+  function saveLottoNum(tx_hash, send_amt) {
+      console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId");
       const data = {
-        chips: SelectedChip,
+        chips: send_amt,
         num1: playerNumbers[0],
         num2: playerNumbers[1],
         num3: playerNumbers[2],
@@ -198,7 +218,7 @@ const App = () => {
         drawedNumbers.push(optionNumbers[index]);
         optionNumbers.splice(index, 1);
       }
-      sendTr(account);
+      sendEth(account,SelectedChip);
       // setDrawedNumbers(drawedNumbers);
       // setGamesNumber((prevNumber) => prevNumber + 1);
       // checkWin(playerNumbers, drawedNumbers);
@@ -245,7 +265,7 @@ const handleConnect = () => {
         <div>
         <span>베팅 코인수:</span>
         <span>
-        <select onChange={handleSelectChip} value={SelectedChip}>
+        <select onChange={handleSelectChip} value={SelectedChip} >
           {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
         </select>
           {(chainId=="8217")?"KLAY":"C4EI"}
