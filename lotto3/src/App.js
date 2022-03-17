@@ -183,6 +183,10 @@ const App = () => {
       alert.show('Metamask Login First !!!')
       return;
     }
+    if(chainId!=8217){
+      alert.show('chainId must 8217 !!!')
+      return;
+    }
     if (playerNumbers.length === 6) {
       const optionNumbers = [...numbers];
       const drawedNumbers = [];

@@ -43,7 +43,7 @@ const App = () => {
     // console.log("############ 138 /lotto2/src/App.js "+Header.jsDt.data[0].yyyywkr+"############");
     if(send_amt===undefined||send_amt===""){send_amt=1;}
     let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
-    console.log("############ 152 /lotto2/src/App.js "+saveData+":saveData/"+send_account+":send_account/"+send_amt+":send_amt/");
+    // console.log("############ 152 /lotto2/src/App.js "+saveData+":saveData/"+send_account+":send_account/"+send_amt+":send_amt/");
 
     try {
       var Web3 = require('web3');
@@ -76,7 +76,7 @@ const App = () => {
   }
 
   function saveLottoNum(tx_hash, send_amt) {
-      console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId");
+      // console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId / "+(chainId===8217)?"KLAY":"C4EI" +" :coin_name");
       const data = {
         chips: send_amt,
         num1: playerNumbers[0],
@@ -87,19 +87,19 @@ const App = () => {
         num6: playerNumbers[5],
         addr: account,
         chainId : chainId,
-        coin_name : "C4EI",
+        coin_name : (chainId===8217)?"KLAY":"C4EI",
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)
       // console.log(response);
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
       .then((res) => {
-          console.log(res.data)
+          // console.log(res.data)
           // response.redirect('/getLotto/'+tx_hash)
           // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
           document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
       }).catch((error) => {
-          console.log(error)
+          // console.log(error)
       });
   }
 
@@ -206,7 +206,7 @@ const handleConnect = () => {
         <select onChange={handleSelectChip} value={SelectedChip} >
           {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
         </select>
-          {(chainId=="8217")?"KLAY":"C4EI"}
+          {(chainId===8217)?"KLAY":"C4EI"}
         </span>
         </div>
         <Results games={gamesNumber} hits={hits} money={money} />
