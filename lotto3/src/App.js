@@ -59,7 +59,13 @@ const App = () => {
       let amount = web3.utils.toBN(send_amt);
       let cal_amount = amount.mul(web3.utils.toBN(10).pow(decimals));
       let contract = new window.web3.eth.Contract(minABI, (chainId===8217)?ceik_tokenAddress:BCK_tokenAddress);
-      contract.methods.transfer(receiverAddress, cal_amount).send({from: send_account})
+      contract.methods.transfer(receiverAddress, cal_amount).send({
+        from: send_account
+        // from- String: 트랜잭션을 보내야 하는 주소입니다.
+        // gasPrice- String(선택 사항): 이 거래에 사용할 wei 단위 가스 가격입니다.
+        // gas- Number(선택): 이 거래에 대해 제공되는 최대 가스(가스 한도).
+        // value- `` Number|String|BN|BigNumber``(선택 사항): wei에서 트랜잭션을 위해 전송된 값입니다.
+      })
       .on('transactionHash', function(hash){
         saveLottoNum(hash, send_amt);
         // console.log(hash);
