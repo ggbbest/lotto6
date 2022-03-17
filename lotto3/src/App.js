@@ -1,32 +1,17 @@
 import "./App.css";
 import React, { useState } from "react";
-
 import Header from "./Header";
 import Results from "./Results";
 import Coupon from "./Coupon";
 import ButtonStart from "./ButtonStart";
 import Display from "./Display";
 import ButtonReset from "./ButtonReset";
-
 import axios from 'axios'; 
-
 ///////////////////// metamask s ////////////////
 import {useWeb3React} from '@web3-react/core';
 import {injected} from './lib/connectors';
-// import detectEthereumProvider from '@metamask/detect-provider'
 ///////////////////// metamask e ////////////////
-// import {ethTX} from 'ethereumjs-tx'; //yarn remove ethereumjs-tx
-//yarn add web3
 import { useAlert } from 'react-alert'
-// import { json } from "express/lib/response";
-//yarn remove reactjs-popup
-// import Popup from 'reactjs-popup';
-// import 'reactjs-popup/dist/index.css';
-// export default () => (
-//   <Popup trigger={<button> Trigger</button>} position="right center">
-//     <div>Popup content here !!</div>
-//   </Popup>
-// );
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -40,7 +25,6 @@ const App = () => {
     21,22,23,24,25,26,27,28,29,30,
     31,32,33,34,35,36,37,38,39,40,
     41,42,43,44,45
-    // ,46,47,48,49,
   ];
   const awards = { three: 5, four: 50, five: 5000, six: 3000000 };
 
@@ -53,9 +37,67 @@ const App = () => {
   const selectListChip = ["1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
   const [SelectedChip, setSelectedChip] = useState("");
   const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
-  // setSelectedChip("1");
    //////////////////////////////////////////////////////
-  
+  async function sendEthByMeta(send_account,send_amt) {
+    // console.log("############ 138 /lotto2/src/App.js "+Header.jsDt.data[0].yyyywkr+"############");
+    if(send_amt===undefined||send_amt===""){send_amt=1;}
+    let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
+    // console.log("############ 152 /lotto2/src/App.js "+saveData+":saveData/"+send_account+":send_account/"+send_amt+":send_amt/");
+    try {
+      var Web3 = require('web3');
+      let web3 = new Web3(Web3.curentProvider);
+      await window.ethereum.enable();
+      window.web3 = new Web3(window.ethereum);
+
+      // const ceik_contract_abi = require("./ceikABI.json");
+      const ceik_tokenAddress = "0x18814b01b5cc76f7043e10fd268cc4364df47da0"; // ceik
+      const receiverAddress   = "0x286A6CE75d9f623FfbA96fC2175FD5fbE2690746"; //klayMain
+      const BCK_tokenAddress = "0x1d187BbeCeF8d7b1731339c301ab8354d4F0A50b"; // BCK
+      let minABI = [{"constant": false,"inputs": [{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transfer","outputs": [{"name": "","type": "bool"}],"type": "function"}];
+
+      let decimals = web3.utils.toBN((chainId===8217)?8:18); // 18 BCK , 8 CEIK
+      let amount = web3.utils.toBN(send_amt);
+      let cal_amount = amount.mul(web3.utils.toBN(10).pow(decimals));
+      let contract = new window.web3.eth.Contract(minABI, (chainId===8217)?ceik_tokenAddress:BCK_tokenAddress);
+      contract.methods.transfer(receiverAddress, cal_amount).send({from: send_account})
+      .on('transactionHash', function(hash){
+        saveLottoNum(hash, send_amt);
+        // console.log(hash);
+      });
+    } catch(e) {
+        console.log("payment fail!");
+        console.log(e);
+    }
+  }
+
+  function saveLottoNum(tx_hash, send_amt) {
+      // console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId / "+(chainId===8217)?"CEIK":"BCK" +" :coin_name");
+      const data = {
+        chips: send_amt,
+        num1: playerNumbers[0],
+        num2: playerNumbers[1],
+        num3: playerNumbers[2],
+        num4: playerNumbers[3],
+        num5: playerNumbers[4],
+        num6: playerNumbers[5],
+        addr: account,
+        chainId : chainId,
+        coin_name : (chainId===8217)?"CEIK":"BCK",
+        tx_hash: tx_hash
+      };
+      // setlinkTR(tx_hash)
+      // console.log(response);
+      axios.post('https://lotto.c4ei.net/api/setLotto', data)
+      .then((res) => {
+          // console.log(res.data)
+          // response.redirect('/getLotto/'+tx_hash)
+          // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
+          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
+      }).catch((error) => {
+          // console.log(error)
+      });
+  }
+
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
       const numbers = [...playerNumbers];
@@ -95,96 +137,11 @@ const App = () => {
       setMoney((prev) => prev + awards.six);
     }
   };
-  
-  function strtodec(amount, dec){
-    var i = 0;
-    if (amount.toString().indexOf('.') != -1) {
-        i = amount.toString().length - (amount.toString().indexOf('.') + 1);
-    }
-    let stringf = amount.toString().split('.').join('');
-    if (dec<i){
-        console.warn("strtodec: amount was truncated");
-        stringf = stringf.substring(0,stringf.length - (i-dec));
-    } else {
-        stringf = stringf + "0".repeat(dec-i);
-    }
-    return stringf;
-  }
 
-  async function sendEthByMeta(send_account,send_amt) {
-    if(send_amt===undefined||send_amt===""){send_amt=1;}
-    let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
-    console.log("############ 152 /lotto2/src/App.js "+saveData+":saveData/"+send_account+":send_account/"+send_amt+":send_amt/");
-    try {
-      var Web3 = require('web3');
-      let web3 = new Web3(Web3.curentProvider);
-      console.log("#### App 121 #### sendEthByMeta ");      
-      // yarn add caver-js // yarn remove caver-js // const Caver = require('caver-js')
-      // const caver = new Caver(window.ethereum); //new Caver(process.env.CEIK_RPC)
-      await window.ethereum.enable();
-      // window.web3 = new Caver(window.ethereum);
-
-      const ceik_contract_abi = require("./ceikABI.json");
-      const ceik_tokenAddress = "0x18814b01b5cc76f7043e10fd268cc4364df47da0"; // ceik
-      const receiverAddress   = "0x286A6CE75d9f623FfbA96fC2175FD5fbE2690746"; //klayMain
-      let sendCEIK = strtodec(send_amt,8); // CEIK decimal 8 
-      console.log("#### App 131 #### sendEthByMeta ");      
-      // const TokenInstance = new caver.klay.Contract(ceik_contract_abi, ceik_tokenAddress)
-      const TokenInstance = new web3.eth.Contract(ceik_contract_abi, ceik_tokenAddress);
-      TokenInstance.methods.transfer(receiverAddress, sendCEIK
-        ).send({from: send_account, gas: 100000, data:web3.utils.toHex(saveData)}
-        ).then(function(receipt){
-          console.log("#### App 137 #### sendEthByMeta ");      
-          saveLottoNum(receipt.transactionHash , send_amt);
-          console.log("blockNumber " + receipt.blockNumber + " / contractAddress" + receipt.contractAddress + " / blockHash" + receipt.blockHash + " / transactionHash" + receipt.transactionHash);
-        })
-      // .on('transactionHash', (hash) => { console.log("### transactionHash ###"); console.log(hash);})
-      // .once('receipt', (receipt) => {console.log("blockNumber " + receipt.blockNumber + " / contractAddress" + receipt.contractAddress + " / blockHash" + receipt.blockHash + " / transactionHash" + receipt.transactionHash);})
-      // .on('confirmation', (confirmationNumber, receipt) => { console.log("### confirmation ###" + confirmationNumber);})
-      // .on('error', console.error)
-      ;
-    } catch(e) {
-        console.log("payment fail!");
-        console.log(e);
-        // msged(<p>Can't connect MetaMask. Please check MetaMask.</p>);
-    }
-  }
-
-  function saveLottoNum(tx_hash, send_amt) {
-      console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId");
-      const data = {
-        chips: send_amt,
-        num1: playerNumbers[0],
-        num2: playerNumbers[1],
-        num3: playerNumbers[2],
-        num4: playerNumbers[3],
-        num5: playerNumbers[4],
-        num6: playerNumbers[5],
-        addr: account,
-        chainId : chainId,
-        coin_name : "CEIK",
-        tx_hash: tx_hash
-      };
-      // setlinkTR(tx_hash)
-      // console.log(response);
-      axios.post('https://lotto.c4ei.net/api/setLotto', data)
-      .then((res) => {
-          console.log(res.data)
-          // response.redirect('/getLotto/'+tx_hash)
-          // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
-          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
-      }).catch((error) => {
-          console.log(error)
-      });
-  }
   //yarn add react-alert
   const startDraw = () => {
     if(account===undefined){
       alert.show('Metamask Login First !!!')
-      return;
-    }
-    if(chainId!=8217){
-      alert.show('chainId must 8217 !!!')
       return;
     }
     if (playerNumbers.length === 6) {
@@ -224,14 +181,13 @@ const handleConnect = () => {
 }
 ///////////////////// metamask e ////////////////
 
-
 /* eslint-disable */
   return (
     <div className="app">
       <Header />
       <main>
         <div>
-          <p>Account: {account}</p>
+          <p>Account: <a href={"/myNum/"+account} target="_blank">{account}</a></p>
           <p>ChainId: {chainId}</p>
         </div>
         <div>
@@ -245,7 +201,7 @@ const handleConnect = () => {
         <select onChange={handleSelectChip} value={SelectedChip} >
           {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
         </select>
-          {(chainId=="8217")?"CEIK":"C4EI"}
+          {(chainId===8217)?"CEIK":"BCK"}
         </span>
         </div>
         <Results games={gamesNumber} hits={hits} money={money} />
