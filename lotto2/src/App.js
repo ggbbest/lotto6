@@ -147,6 +147,28 @@ const App = () => {
   //       // return hash;
   //     });
   // }
+// function sendERC(send_account,send_amt){
+//   const tx = myContract.methods.setData(2);
+//   const gas = await tx.estimateGas({from: address});
+//   const gasPrice = await web3.eth.getGasPrice();
+//   const data = tx.encodeABI();
+//   const nonce = await web3.eth.getTransactionCount(address);
+//   const txData = {
+//     from: address,
+//     to: myContract.options.address,
+//     data: data,
+//     gas,
+//     gasPrice,
+//     nonce, 
+//     chain: 'rinkeby', 
+//     hardfork: 'istanbul'
+//   };
+
+//   console.log(`Old data value: ${await myContract.methods.data().call()}`);
+//   const receipt = await web3.eth.sendTransaction(txData);
+//   console.log(`Transaction hash: ${receipt.transactionHash}`);
+//   console.log(`New data value: ${await myContract.methods.data().call()}`);
+// }
 
   async function sendEthByMeta(send_account,send_amt) {
     if(send_amt===undefined||send_amt===""){send_amt=1;}
@@ -156,16 +178,12 @@ const App = () => {
     try {
       var Web3 = require('web3');
       let web3 = new Web3(Web3.curentProvider);
-        // if(window.ethereum){ 
-        //   web3 = new Web3(Web3.curentProvider);
-        //   console.log("############ 106 Web3.curentProvider");
-        // }      
       const params = {
           from: send_account,
           to: '0x286A6CE75d9f623FfbA96fC2175FD5fbE2690746', //klayMain
-          value: web3.utils.toWei(send_amt + '', 'ether'),
+          value: web3.utils.toWei(send_amt + '', 'ether')
           // gas: 39000,
-          data:web3.utils.toHex(saveData)
+          ,data:web3.utils.toHex(saveData)
       };
       await window.ethereum.enable();
       window.web3 = new Web3(window.ethereum);
