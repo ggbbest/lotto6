@@ -55,6 +55,20 @@ router.get('/lottoNum/:id', function(req, res, next) {
   res.render('lottoNum', { title: 'lotto number', "yyyy":_yyyy, "wk":_wk, "regdate":_regdate, "chips":_chips,"chainId":_chainId, "coin_name":_coin_name, "addr":_addr, "sendTr": _sendTr, "numb_tot" : _numb_tot });
 });
 
+//https://lotto.c4ei.net/myNum/0x0eEA7CA12D4632FF1368df24Cb429dBEa17dD71D
+router.get('/myNum/:id', function(req, res, next) {
+  let sql ="";
+  sql = sql +" SELECT `yyyy`,`wk`,`yyyymmdd`,`chips`,`chainId`,`coin_name`,`addr`,`sendTr` ,`numb_tot`,`regdate` ";
+  sql = sql +" FROM lotto WHERE addr='"+req.params.id+"'  ";
+  sql = sql +" AND regdate > DATE_ADD(CURRENT_DATE(), INTERVAL -30 DAY) ";
+  sql = sql +" ORDER BY coin_name, chainid ";
+
+  let result = sync_connection.query(sql);
+  console.log("######### server.js ######### "+timestamp()+" myNum addr: "+req.params.id);
+  res.render('myNum', { title: 'my number', "result":result });
+});
+
+
 function timestamp(){ 
   var today = new Date(); 
   today.setHours(today.getHours() + 9); 

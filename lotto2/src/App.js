@@ -192,7 +192,7 @@ const handleConnect = () => {
       <Header />
       <main>
         <div>
-          <p>Account: {account}</p>
+          <p>Account: <a href={"/myNum/"+account} target="_blank">{account}</a></p>
           <p>ChainId: {chainId}</p>
         </div>
         <div>
