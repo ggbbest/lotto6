@@ -34,12 +34,12 @@ ENGINE=InnoDB
 AUTO_INCREMENT=1
 ;
 --////////////////////////////////////////////////////////////////////////////////////////////////
-CREATE TABLE `lotto_num` (
+CREATE TABLE `lotto` (
 	`idx` BIGINT(20) NOT NULL AUTO_INCREMENT,
 	`yyyy` VARCHAR(4) NOT NULL COLLATE 'utf8_unicode_ci',
 	`wk` VARCHAR(2) NOT NULL COLLATE 'utf8_unicode_ci',
 	`yyyymmdd` VARCHAR(8) NOT NULL COLLATE 'utf8_unicode_ci',
-	`sum_chips` INT(4) NOT NULL,
+	`chips` DECIMAL(10,4) NOT NULL DEFAULT '0.0000',
 	`numb_tot` VARCHAR(20) NULL COLLATE 'utf8_unicode_ci',
 	`numb1` TINYINT(2) NOT NULL,
 	`numb2` TINYINT(2) NOT NULL,
@@ -47,12 +47,29 @@ CREATE TABLE `lotto_num` (
 	`numb4` TINYINT(2) NOT NULL,
 	`numb5` TINYINT(2) NOT NULL,
 	`numb6` TINYINT(2) NOT NULL,
+	`chainId` VARCHAR(10) NULL COLLATE 'utf8_unicode_ci',
+	`coin_name` VARCHAR(10) NULL COLLATE 'utf8_unicode_ci',
+	`addr` VARCHAR(70) NOT NULL COLLATE 'utf8_unicode_ci',
+	`sendTr` VARCHAR(100) NULL COLLATE 'utf8_unicode_ci',
 	`regdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (`idx`) USING BTREE
+	`c1` TINYINT(1) NOT NULL DEFAULT '0',
+	`c2` TINYINT(1) NOT NULL DEFAULT '0',
+	`c3` TINYINT(1) NOT NULL DEFAULT '0',
+	`c4` TINYINT(1) NOT NULL DEFAULT '0',
+	`c5` TINYINT(1) NOT NULL DEFAULT '0',
+	`c6` TINYINT(1) NOT NULL DEFAULT '0',
+	`c_tot` DECIMAL(2,1) NOT NULL DEFAULT '0.0',
+	`c_rank` TINYINT(1) NOT NULL DEFAULT '0',
+	`sendYN` VARCHAR(1) NOT NULL DEFAULT 'N' COLLATE 'utf8_unicode_ci',
+	`sendDate` DATETIME NULL,
+	`memo` VARCHAR(100) NULL COLLATE 'utf8_unicode_ci',
+	PRIMARY KEY (`idx`) USING BTREE,
+	INDEX `addr` (`addr`) USING BTREE,
+	INDEX `yyyy_wk` (`yyyy`, `wk`) USING BTREE
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=1
+AUTO_INCREMENT=168
 ;
 
 INSERT INTO lotto_num (`yyyy`,`wk`,`yyyymmdd`) SELECT '2202','12','22020326' FROM DUAL;
