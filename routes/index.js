@@ -34,8 +34,18 @@ router.get('/', function(req, res, next) {
   let _c4ei_sum_chips  = result[0].c4ei_sum_chips;
   let _klay_sum_chips  = result[0].klay_sum_chips;
   let _ceik_sum_chips  = result[0].ceik_sum_chips;
+
+  let sql2 = "";
+  sql2 = sql2 +"SELECT yyyy,wk,coin_name,sumchips,sum_sendchips,real_tot,real_half_tot,amt1st,amt2nd,amt3rd,regdate FROM lotto_sum_money WHERE `yyyy`='2022' AND `wk`='1'";
+  let result2 = sync_connection.query(sql2);
+
+  let sql3 = "";
+  sql3 = sql3 +"SELECT yyyy,wk,coin_name,c_rank,rankCnt,chipSum FROM lotto_rank WHERE `yyyy`='2022' AND `wk`='1'";
+  let result3 = sync_connection.query(sql3);
+
   // console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
-  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips , "ceik_sum_chips":_ceik_sum_chips });
+  res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips , "ceik_sum_chips":_ceik_sum_chips
+  , "result2":result2, "result3":result3 });
 });
 
 //lottoNum

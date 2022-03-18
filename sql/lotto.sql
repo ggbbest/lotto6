@@ -46,7 +46,7 @@ CREATE TABLE `lotto` (
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=231
+AUTO_INCREMENT=1
 ;
 
 INSERT INTO lotto_num (`yyyy`,`wk`,`yyyymmdd`) SELECT '2202','12','22020326' FROM DUAL;
@@ -89,24 +89,22 @@ CREATE TABLE `lotto_sum_money` (
 COMMENT='회차별 로또 금액 합 real_half_tot 금액을 1,2,3 등이 나눔'
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=11
+AUTO_INCREMENT=1
 ;
 
-CREATE TABLE `lotto_result` (
+CREATE TABLE `lotto_rank` (
 	`idx` BIGINT(20) NOT NULL AUTO_INCREMENT,
 	`yyyy` VARCHAR(4) NOT NULL COLLATE 'utf8_unicode_ci',
 	`wk` VARCHAR(2) NOT NULL COLLATE 'utf8_unicode_ci',
-	`chips_tot` DECIMAL(10,4) NOT NULL DEFAULT '0.0000',
 	`coin_name` VARCHAR(10) NULL COLLATE 'utf8_unicode_ci',
-	`r1` INT(4) NOT NULL DEFAULT '0',
-	`r2` INT(4) NOT NULL DEFAULT '0',
-	`r3` INT(4) NOT NULL DEFAULT '0',
-	`r4` INT(4) NOT NULL DEFAULT '0',
-	`r5` INT(4) NOT NULL DEFAULT '0',
+	`c_rank` INT(4) NOT NULL DEFAULT '0',
+	`rankCnt` INT(4) NOT NULL DEFAULT '0',
+	`chipSum` DECIMAL(10,4) NOT NULL DEFAULT '0.0000',
 	`regdate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (`idx`) USING BTREE
+	PRIMARY KEY (`idx`) USING BTREE,
+	INDEX `idx_lotto_rank_1` (`yyyy`, `wk`, `coin_name`) USING BTREE
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=4
+AUTO_INCREMENT=1
 ;
