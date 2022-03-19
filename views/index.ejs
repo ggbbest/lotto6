@@ -43,7 +43,6 @@
         .tbl_data tr td.nobd_right {border-right:0}
         .tbl_data tfoot tr th {background:#fff; color:#d43301}
         .tbl_data tfoot tr td {color:#d43301}
-        .list_text_common {/*padding-top:25px*/}
         .list_text_common li {position:relative; padding-left:13px; /*font-weight:300; color:#777; line-height:22px*/}
         .list_text_common li ~ li {margin-top:6px}
         .list_text_common li:after {content:""; position:absolute; left:0; top:.8em; width:4px; border-top:1px solid #aaa}
@@ -71,6 +70,16 @@
       </div>
       <div class="list_my_number">
         <!-- <h3>수익금은 일정 비율로 KLAY-CEIK 에 swap 됩니다.</h3> -->
+
+      <% if (result4.length>0) { %>
+        <h2><%=result4[0].yyyy%>년 <%=result4[0].wk%> 주차 당첨번호 : <%=result4[0].numb_tot%>  plus :<%=result4[0].numb7%> </h2>
+      <% } %>
+      <div style="height: 5px;"></div>
+      <font color="red" style="font-size: 11px;">
+        ※ <b>토요일 20시 30분 부터 토요일 자정</b>까지는 게임을 할 수 없습니다. 
+        해당 시간대에 진행된 게임은 당첨되도라도 당첨금이 지급 되지 않습니다.
+      </font>
+      <div style="height: 5px;"></div>
 
         <div class="tbl_basic">
           <div class="group_title">
@@ -127,8 +136,8 @@
               <li>4등, 5등 당첨자가 과다하게 발생하여 당첨금이 부족할 경우 별도로 정한 지급률에 의거하여 지급됩니다.</li>
           </ul>
           <div style="height: 15px;"></div>
-          <h3>현재 백오피스단 로직 검증용도로 2021년 1주차 data를 보여주고있습니다.</h3>
 
+          <h3>1등 당첨코인수</h3>
           <table>
             <tbody>
               <tr>
@@ -152,10 +161,7 @@ if (result2.length>0) {
   }
 } else { %>
 <tr>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
+  <td  style="text-align: center;" colspan="4"> 자료가 없습니다. </td>
 </tr>
 
 <% } %>
@@ -167,6 +173,7 @@ if (result2.length>0) {
           </table>
 
           <div style="height: 15px;"></div>
+          <h3>당첨자수</h3>
           <table>
             <tbody>
               <tr>
@@ -192,11 +199,7 @@ if (result3.length>0) {
   }
 } else { %>
 <tr>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
-  <td  style="text-align: left;"> </td>
+  <td  style="text-align: center;" colspan="5"> 자료가 없습니다. </td>
 </tr>
 
 <% } %>

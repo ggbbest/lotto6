@@ -32,6 +32,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(bodyParser.json());
 
+var db_config = require(__dirname + '/routes/database.js');// 2020-09-13
+var sync_mysql = require('sync-mysql'); //2020-01-28
+let sync_connection = new sync_mysql(db_config.constr());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -129,17 +132,35 @@ function timestamp(){
 
 app.use('/lotto', express.static( path.join(__dirname, 'lotto/build') ))
 app.get('/lotto', function(req, res){
-    res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
+  res.sendFile( path.join(__dirname, 'lotto/build/index.html') )
 })
 
 app.use('/lotto2', express.static( path.join(__dirname, 'lotto2/build') ))
 app.get('/lotto2', function(req, res){
+  let result = sync_connection.query("SELECT case when DAYOFWEEK(NOW()) =7 then 'Y' ELSE 'N' end satYN, hour(NOW()) hh, MINUTE(NOW()) mm from dual");
+  let _satYN = result[0].satYN; 
+  let _mm = result[0].mm; 
+  let _hh = result[0].hh; 
+  console.log("#### app 144 #### _satYN :" +_satYN +"/ _mm :"+_mm+"/ _hh :"+_hh);
+  if(_satYN =='Y' && _mm >='20' && _hh >='30'){ //토요일 20시 30분 부터 토요일 자정까지는 게임을 할 수 없습니다
+    res.sendFile( path.join(__dirname, '/sat22block.html') )
+  } else {
     res.sendFile( path.join(__dirname, 'lotto2/build/index.html') )
+  }
 })
 
 app.use('/lotto3', express.static( path.join(__dirname, 'lotto3/build') ))
 app.get('/lotto3', function(req, res){
+  let result = sync_connection.query("SELECT case when DAYOFWEEK(NOW()) =7 then 'Y' ELSE 'N' end satYN, hour(NOW()) hh, MINUTE(NOW()) mm from dual");
+  let _satYN = result[0].satYN; 
+  let _mm = result[0].mm; 
+  let _hh = result[0].hh; 
+  console.log("#### app 158 #### _satYN :" +_satYN +"/ _mm :"+_mm+"/ _hh :"+_hh);
+  if(_satYN =='Y' && _mm >='20' && _hh >='30'){ //토요일 20시 30분 부터 토요일 자정까지는 게임을 할 수 없습니다
+    res.sendFile( path.join(__dirname, '/sat22block.html') )
+  } else {
     res.sendFile( path.join(__dirname, 'lotto3/build/index.html') )
+  }
 })
 //###############################################################
 
