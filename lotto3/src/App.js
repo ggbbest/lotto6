@@ -37,10 +37,18 @@ const App = () => {
   const selectListChip = ["1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
   const [SelectedChip, setSelectedChip] = useState("");
   const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
+
+  const selectListCoinName = ["CEIK", "KSP", "BCK"];
+  const [SelectedCoinName, setSelectedCoinName] = useState("");
+  const handleSelectCoinName = (e) => { setSelectedCoinName(e.target.value); };
+  // handleSelectCoinName("BCK");
    //////////////////////////////////////////////////////
-  async function sendEthByMeta(send_account,send_amt) {
+  async function sendEthByMeta(send_account, send_amt, send_coinname) {
     // console.log("############ 138 /lotto2/src/App.js "+Header.jsDt.data[0].yyyywkr+"############");
     if(send_amt===undefined||send_amt===""){send_amt=1;}
+    if(send_coinname===undefined||send_coinname===""){send_coinname="CEIK";}
+    // alert.show(send_coinname+":send_coinname / " + send_amt +" : send_amt");
+    
     let saveData = playerNumbers[0]+" "+playerNumbers[1]+" "+playerNumbers[2]+" "+playerNumbers[3]+" "+playerNumbers[4]+" "+playerNumbers[5];
     // console.log("############ 152 /lotto2/src/App.js "+saveData+":saveData/"+send_account+":send_account/"+send_amt+":send_amt/");
     try {
@@ -50,15 +58,28 @@ const App = () => {
       window.web3 = new Web3(window.ethereum);
 
       // const ceik_contract_abi = require("./ceikABI.json");
-      const ceik_tokenAddress = "0x18814b01b5cc76f7043e10fd268cc4364df47da0"; // ceik
-      const receiverAddress   = "0x286A6CE75d9f623FfbA96fC2175FD5fbE2690746"; //klayMain
+      const CEIK_tokenAddress = "0x18814b01b5cc76f7043e10fd268cc4364df47da0"; // ceik
       const BCK_tokenAddress = "0x1d187BbeCeF8d7b1731339c301ab8354d4F0A50b"; // BCK
+      const KSP_tokenAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"; //KSP
+      const receiverAddress   = "0x286A6CE75d9f623FfbA96fC2175FD5fbE2690746"; //klayMain
       let minABI = [{"constant": false,"inputs": [{"name": "_to","type": "address"},{"name": "_value","type": "uint256"}],"name": "transfer","outputs": [{"name": "","type": "bool"}],"type": "function"}];
-
-      let decimals = web3.utils.toBN((chainId===8217)?8:18); // 18 BCK , 8 CEIK
+      let tokenAddress ="";
+      let token_decimals = 18; 
+      let must_chain = 8217;
+      switch(send_coinname) {
+          case "CEIK" : tokenAddress = CEIK_tokenAddress ; token_decimals = 8; must_chain = 8217; break;
+          case "KSP" : tokenAddress = KSP_tokenAddress ; token_decimals = 18;  must_chain = 8217; break;
+          case "BCK" : tokenAddress = BCK_tokenAddress ; token_decimals = 18;  must_chain = 21004; break;
+          default : tokenAddress = BCK_tokenAddress ; token_decimals = 18; must_chain=8217; break;
+      }
+      if(chainId!==must_chain){
+        alert.show('체인id가 다릅니다. 메타마스크의 체인id 를 확인 하세요!')
+        return;
+      }
+      let decimals = web3.utils.toBN(token_decimals); // 18 BCK , 8 CEIK
       let amount = web3.utils.toBN(send_amt);
       let cal_amount = amount.mul(web3.utils.toBN(10).pow(decimals));
-      let contract = new window.web3.eth.Contract(minABI, (chainId===8217)?ceik_tokenAddress:BCK_tokenAddress);
+      let contract = new window.web3.eth.Contract(minABI, tokenAddress);
       contract.methods.transfer(receiverAddress, cal_amount).send({
         from: send_account
         // from- String: 트랜잭션을 보내야 하는 주소입니다.
@@ -67,7 +88,7 @@ const App = () => {
         // value- `` Number|String|BN|BigNumber``(선택 사항): wei에서 트랜잭션을 위해 전송된 값입니다.
       })
       .on('transactionHash', function(hash){
-        saveLottoNum(hash, send_amt);
+        saveLottoNum(hash, send_amt , send_coinname);
         // console.log(hash);
       });
     } catch(e) {
@@ -76,7 +97,7 @@ const App = () => {
     }
   }
 
-  function saveLottoNum(tx_hash, send_amt) {
+  function saveLottoNum(tx_hash, send_amt, send_coinname) {
       // console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId / "+(chainId===8217)?"CEIK":"BCK" +" :coin_name");
       const data = {
         chips: send_amt,
@@ -88,7 +109,7 @@ const App = () => {
         num6: playerNumbers[5],
         addr: account,
         chainId : chainId,
-        coin_name : (chainId===8217)?"CEIK":"BCK",
+        coin_name : send_coinname,
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)
@@ -158,7 +179,7 @@ const App = () => {
         drawedNumbers.push(optionNumbers[index]);
         optionNumbers.splice(index, 1);
       }
-      sendEthByMeta(account,SelectedChip);
+      sendEthByMeta(account,SelectedChip,SelectedCoinName);
       // setDrawedNumbers(drawedNumbers);
       // setGamesNumber((prevNumber) => prevNumber + 1);
       // checkWin(playerNumbers, drawedNumbers);
@@ -202,12 +223,16 @@ const handleConnect = () => {
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
         <div>
-        <span>베팅 코인수:</span>
+        <span> 코인수:</span>
         <span>
-        <select onChange={handleSelectChip} value={SelectedChip} >
-          {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
-        </select>
-          {(chainId===8217)?"CEIK":"BCK"}
+          <select onChange={handleSelectChip} value={SelectedChip} >
+            {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
+          </select>
+          
+          <select onChange={handleSelectCoinName} value={SelectedCoinName} >
+            {selectListCoinName.map((item) => ( <option value={item} key={item}> {item} </option> ))}
+          </select>
+
         </span>
         </div>
         <Results games={gamesNumber} hits={hits} money={money} />
