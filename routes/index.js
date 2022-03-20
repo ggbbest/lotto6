@@ -32,14 +32,23 @@ router.get('/', function(req, res, next) {
   sql = sql +"GROUP BY coin_name ) ds ";
   sql = sql +"GROUP BY yyyy, wk ";
   let result = sync_connection.query(sql);
-  let _yyyy       = result[0].yyyy;
-  let _wk         = result[0].wk;
-  let _c4ei_sum_chips  = result[0].c4ei_sum_chips;
-  let _klay_sum_chips  = result[0].klay_sum_chips;
-  let _ceik_sum_chips  = result[0].ceik_sum_chips;
-  let _ksp_sum_chips   = result[0].ksp_sum_chips;
-  let _bck_sum_chips   = result[0].bck_sum_chips;
-
+  //console.log(result.length+":result.length");
+  let _yyyy             = "";
+  let _wk               = "";
+  let _c4ei_sum_chips   = 0;
+  let _klay_sum_chips   = 0;
+  let _ceik_sum_chips   = 0;
+  let _ksp_sum_chips    = 0;
+  let _bck_sum_chips    = 0;
+  if(result.length>0){
+    _yyyy             = result[0].yyyy;
+    _wk               = result[0].wk;
+    _c4ei_sum_chips   = result[0].c4ei_sum_chips;
+    _klay_sum_chips   = result[0].klay_sum_chips;
+    _ceik_sum_chips   = result[0].ceik_sum_chips;
+    _ksp_sum_chips    = result[0].ksp_sum_chips;
+    _bck_sum_chips    = result[0].bck_sum_chips;      
+  }
   let sql2 = "";
   sql2 = sql2 +"SELECT yyyy,wk,coin_name,sumchips,sum_sendchips,real_tot,real_half_tot,amt1st,amt2nd,amt3rd,regdate FROM lotto_sum_money WHERE `yyyy`='2022' AND `wk`='11'";
   let result2 = sync_connection.query(sql2);
