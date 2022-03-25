@@ -29,11 +29,11 @@ const App = () => {
   //////////////////////////////////////////////////////
   const selectListChip = ["0.001","1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
   const [SelectedChip, setSelectedChip] = useState("");
-  const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
+  const onchg_SelectChip = (e) => { setSelectedChip(e.target.value); };
 
   const selectListCoinName = ["KLAY", "KSP"];
   const [SelectedCoinName, setSelectedCoinName] = useState("");
-  const handleSelectCoinName = (e) => { setSelectedCoinName(e.target.value); };
+  const onchg_SelectCoinName = (e) => { setSelectedCoinName(e.target.value); };
   const [userAddress, setuserAddress] = useState("");
    //////////////////////////////////////////////////////
 
@@ -54,14 +54,14 @@ const App = () => {
 
   //////////////////////////////////////////////////////
   const bappName = 'lotto.c4ei.net'
-  const successLink = 'https://lotto.c4ei.net/lotto'
-  const failLink = 'https://lotto.c4ei.net/lotto'
+  const successLink = 'https://lotto.c4ei.net/klipSuccess'
+  const failLink = 'https://lotto.c4ei.net/klipFail'
   let loginActive=false;
   const actLogin = async () => {
     if(!loginActive)
     { 
       try {
-        const { request_key } = await prepare.auth({bappName});
+        const { request_key } = await prepare.auth({bappName, successLink, failLink});
         // await getKlipdata(request_key);
         getKlipdata(request_key);
         // if (res.status === 'completed') {setuserAddress(res.data.klaytn_address);}
@@ -76,31 +76,49 @@ const App = () => {
   }
 
   async function getKlipdata(request_key){
-    alert('request_key :' + request_key );
-    const getKlipdata = await getResult(request_key);
-    if (getKlipdata.status === 'completed') {
-      setuserAddress(getKlipdata.data.klaytn_address);
-      loginActive = true;
-      alert('res 79 :' + getKlipdata.data.klaytn_address);
-    }else{
-      alert('res 81 :no data ');
-    }
+    alert('79 request_key :' + request_key );
+    axios.get( `https://a2a-api.klipwallet.com/v2/a2a/result?request_key=${request_key}`)
+      .then((res) => {
+        if (res.data.result) {
+          alert(` 83 [Result] ${JSON.stringify(res.data.result)}`);
+          // console.log(`[Result] ${JSON.stringify(res.data.result)}`);
+        }else{
+          alert('86 no data ')
+        }
+      }).catch((error) => {
+        alert('89 error :'+error)
+      });
+    // const getKlipdata = await getResult(request_key);
+    // if (getKlipdata.status === 'completed') {
+    //   setuserAddress(getKlipdata.data.klaytn_address);
+    //   loginActive = true;
+    //   alert('res 79 :' + getKlipdata.data.klaytn_address);
+    // }else{
+    //   alert('res 81 :no data ');
+    // }
   }
   
-
   const sendPrepareRequest = async (send_account, send_amt, send_coinname) => {
     if(send_amt===undefined||send_amt===""){send_amt=1;}
     if(send_coinname===undefined||send_coinname===""){send_coinname="KLAY";}
     const KSP_tokenAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"; //KSP
-    const rcvAddr = '0x7C720ca152B43fa72a24eCcd51ccDAFBF74A884e'
+    const rcvAddr = '0x7C720ca152B43fa72a24eCcd51ccDAFBF74A884e';
     alert('sendPrepareRequest 87 send_account :'+send_account+', send_amt:'+send_amt+', send_coinname:'+send_coinname+'');
-    const res = send_coinname==="KLAY"? await prepare.sendKLAY({ bappName, send_account, rcvAddr, send_amt }) 
-      : await prepare.sendToken({ bappName, send_account, rcvAddr, send_amt, KSP_tokenAddress });
-    alert('sendPrepareRequest 90');
-    if (res.request_key) {
-      setStep(SHOW_LOADING)
-      request(res.request_key)
-      startPollingResult(res.request_key, send_amt , send_coinname )
+    if(send_coinname==="KLAY"){
+      const data = await  prepare.sendKLAY({ bappName, send_account, rcvAddr, send_amt });
+      if (data.request_key) {
+        setStep(SHOW_LOADING)
+        request(data.request_key)
+        startPollingResult(data.request_key, send_amt , send_coinname )
+      }
+    }
+    if(send_coinname==="KSP"){
+      const data = await prepare.sendToken({ bappName, send_account, rcvAddr, send_amt, KSP_tokenAddress });
+      if (data.request_key) {
+        setStep(SHOW_LOADING)
+        request(data.request_key)
+        startPollingResult(data.request_key, send_amt , send_coinname )
+      }
     }
   }
   
@@ -131,11 +149,10 @@ const App = () => {
   //////////////////////////////////////////////////////
 
   const startDraw = () => {
-    if(userAddress==''){
-      alert("Klip Login First !!!");
-      return;
-    }
-    alert("startDraw 129");
+    // if(userAddress==''){
+    //   alert("Klip Login First !!!");
+    //   return;
+    // }
     if (playerNumbers.length === 6) {
       const optionNumbers = [...numbers];
       const drawedNumbers = [];
@@ -206,11 +223,11 @@ const App = () => {
         <div>
         <span> 코인수:</span>
         <span>
-          <select onChange={handleSelectChip} value={SelectedChip} >
+          <select onChange={onchg_SelectChip} value={SelectedChip} >
             {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
           </select>
           
-          <select onChange={handleSelectCoinName} value={SelectedCoinName} >
+          <select onChange={onchg_SelectCoinName} value={SelectedCoinName} >
             {selectListCoinName.map((item) => ( <option value={item} key={item}> {item} </option> ))}
           </select>
         </span>

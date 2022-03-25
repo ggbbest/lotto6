@@ -96,6 +96,11 @@ router.get('/myNum/:id', function(req, res, next) {
   res.render('myNum', { title: 'my number', "result":result });
 });
 
+router.get('/klipSuccess/:id', function(req, res, next) {
+  console.log("######### index.js 100 ######### "+timestamp()+" param: "+req.params.id);
+  res.render('klipSuccess', { title: 'klipSuccess', "result":req.params.id });
+});
+
 
 function timestamp(){ 
   var today = new Date(); 
