@@ -201,7 +201,7 @@ const handleConnect = () => {
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
         <div>
-        <span>베팅 코인수:</span>
+        <span>코인수:</span>
         <span>
         <select onChange={handleSelectChip} value={SelectedChip} >
           {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
