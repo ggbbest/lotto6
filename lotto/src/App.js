@@ -10,25 +10,32 @@ import ButtonReset from "./ButtonReset";
 
 import axios from 'axios'; 
 import { prepare, request, getResult } from 'klip-sdk'
-// import { response } from "express";
 
 const App = () => {
+  // const alert2 = useAlert();
   const numbers = [
     1,2,3,4,5,6,7,8,9,10,
     11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,
     31,32,33,34,35,36,37,38,39,40,
     41,42,43,44,45
-    // ,46,47,48,49,
   ];
-  const awards = { three: 5, four: 50, five: 5000, six: 3000000 };
-
+  
   const [playerNumbers, setPlayerNumbers] = useState([]);
   const [drawedNumbers, setDrawedNumbers] = useState([]);
   const [gamesNumber, setGamesNumber] = useState(0);
   const [hits, setHits] = useState(0);
   const [money, setMoney] = useState(0);
-  // const [linkTR, setlinkTR] = useState(0);
+  //////////////////////////////////////////////////////
+  const selectListChip = ["0.001","1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
+  const [SelectedChip, setSelectedChip] = useState("");
+  const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
+
+  const selectListCoinName = ["KLAY", "KSP"];
+  const [SelectedCoinName, setSelectedCoinName] = useState("");
+  const handleSelectCoinName = (e) => { setSelectedCoinName(e.target.value); };
+  const [userAddress, setuserAddress] = useState("");
+   //////////////////////////////////////////////////////
 
   const addPlayerNumbers = (number, event) => {
     if (playerNumbers.length < 6 && !playerNumbers.includes(number)) {
@@ -45,60 +52,90 @@ const App = () => {
     }
   };
 
-  const checkWin = (playerNumbers, drawedNumbers) => {
-    const winNumbers = [];
-
-    playerNumbers.forEach(function (number) {
-      for (let i = 0; i < 6; i++) {
-        if (number === drawedNumbers[i]) {
-          winNumbers.push(number);
-        }
+  //////////////////////////////////////////////////////
+  const bappName = 'lotto.c4ei.net'
+  const successLink = 'https://lotto.c4ei.net/lotto'
+  const failLink = 'https://lotto.c4ei.net/lotto'
+  let loginActive=false;
+  const actLogin = async () => {
+    if(!loginActive)
+    { 
+      try {
+        const { request_key } = await prepare.auth({bappName});
+        // await getKlipdata(request_key);
+        getKlipdata(request_key);
+        // if (res.status === 'completed') {setuserAddress(res.data.klaytn_address);}
+        console.log("68 line : getKlipdata ");
+      } catch (e) {
+        alert('e :' + e);
       }
-    });
-
-    const hits = winNumbers.length;
-    setHits(hits);
-
-    if (hits === 3) {
-      setMoney((prev) => prev + awards.three);
-    } else if (hits === 4) {
-      setMoney((prev) => prev + awards.four);
-    } else if (hits === 5) {
-      setMoney((prev) => prev + awards.five);
-    } else if (hits === 6) {
-      setMoney((prev) => prev + awards.six);
+    }else{
+      setuserAddress("");
+      loginActive = false;
     }
-  };
-  // async
-  function saveLottoNum(tx_hash) {
-      // console.log("#### App 70 #### "+ numb_tot +" : numb_tot ");
+  }
+
+  async function getKlipdata(request_key){
+    alert('request_key :' + request_key );
+    const getKlipdata = await getResult(request_key);
+    if (getKlipdata.status === 'completed') {
+      setuserAddress(getKlipdata.data.klaytn_address);
+      loginActive = true;
+      alert('res 79 :' + getKlipdata.data.klaytn_address);
+    }else{
+      alert('res 81 :no data ');
+    }
+  }
+  
+
+  const sendPrepareRequest = async (send_account, send_amt, send_coinname) => {
+    if(send_amt===undefined||send_amt===""){send_amt=1;}
+    if(send_coinname===undefined||send_coinname===""){send_coinname="KLAY";}
+    const KSP_tokenAddress = "0xc6a2ad8cc6e4a7e08fc37cc5954be07d499e7654"; //KSP
+    const rcvAddr = '0x7C720ca152B43fa72a24eCcd51ccDAFBF74A884e'
+    alert('sendPrepareRequest 87 send_account :'+send_account+', send_amt:'+send_amt+', send_coinname:'+send_coinname+'');
+    const res = send_coinname==="KLAY"? await prepare.sendKLAY({ bappName, send_account, rcvAddr, send_amt }) 
+      : await prepare.sendToken({ bappName, send_account, rcvAddr, send_amt, KSP_tokenAddress });
+    alert('sendPrepareRequest 90');
+    if (res.request_key) {
+      setStep(SHOW_LOADING)
+      request(res.request_key)
+      startPollingResult(res.request_key, send_amt , send_coinname )
+    }
+  }
+  
+  function saveLottoNum(tx_hash, send_amt, send_coinname) {
+      // console.log("#### App 181 #### saveLottoNum "+ send_amt +" : send_amt /" + chainId+" : chainId / "+(chainId===8217)?"CEIK":"BCK" +" :coin_name");
       const data = {
-        chips: "1",
+        chips: send_amt,
         num1: playerNumbers[0],
         num2: playerNumbers[1],
         num3: playerNumbers[2],
         num4: playerNumbers[3],
         num5: playerNumbers[4],
         num6: playerNumbers[5],
-        addr: "",
-        chainId : "8217",
-        coin_name : "KLAY",
+        addr: userAddress,
+        chainId : 8217,
+        coin_name : send_coinname,
         tx_hash: tx_hash
       };
       // setlinkTR(tx_hash)
       // console.log(response);
       axios.post('https://lotto.c4ei.net/api/setLotto', data)
       .then((res) => {
-          console.log(res.data)
-          // response.redirect('/getLotto/'+tx_hash)
-          // document.writeln("<script>https://lotto.c4ei.net/lottoNum/"+tx_hash+"</script>")
-          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a></body></html>')
+          document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
       }).catch((error) => {
-          console.log(error)
+          // console.log(error)
       });
   }
+  //////////////////////////////////////////////////////
 
   const startDraw = () => {
+    if(userAddress==''){
+      alert("Klip Login First !!!");
+      return;
+    }
+    alert("startDraw 129");
     if (playerNumbers.length === 6) {
       const optionNumbers = [...numbers];
       const drawedNumbers = [];
@@ -107,7 +144,8 @@ const App = () => {
         drawedNumbers.push(optionNumbers[index]);
         optionNumbers.splice(index, 1);
       }
-      sendPrepareRequest();
+      sendPrepareRequest(userAddress,SelectedChip,SelectedCoinName);
+      // sendEthByMeta(userAddress,SelectedChip,SelectedCoinName);
       // setDrawedNumbers(drawedNumbers);
       // setGamesNumber((prevNumber) => prevNumber + 1);
       // checkWin(playerNumbers, drawedNumbers);
@@ -123,33 +161,19 @@ const App = () => {
     setHits(0);
     setMoney(0);
   };
-///////////////////////////////////////////////////////////////////
-const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
+  ///////////////////////////////////////////////////////////////////
+  const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
 
   const [step, setStep] = useState(SEND_REQUEST)
 
-  const to = '0x7C720ca152B43fa72a24eCcd51ccDAFBF74A884e'
-  const bappName = 'lotto'
-  const amount = '1'
-
-  const sendPrepareRequest = async () => {
-    const res = await prepare.sendKLAY({ bappName, to, amount })
-
-    if (res.request_key) {
-      setStep(SHOW_LOADING)
-      request(res.request_key)
-      startPollingResult(res.request_key)
-    }
-  }
-
-  const startPollingResult = (requestKey) => {
+  const startPollingResult = (requestKey, send_amt , send_coinname) => {
     const id = setInterval(async () => {
       const res = await getResult(requestKey)
       if (res.status === 'completed') {
         clearTimeout(id)
         setStep(SHOW_RESULT)
         if (res.result.status === 'success') {
-          saveLottoNum(res.result.tx_hash);  // db save
+          saveLottoNum(res.result.tx_hash, send_amt , send_coinname);
         }else{
           // error maybe ...
         }
@@ -164,14 +188,33 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
   // }
   }
   ///////////////////////////////////////////////////////////////////
+  
 /* eslint-disable */
   return (
     <div className="app">
       <Header />
 
       <main>
+        <div>
+          <p>Account: <a href={"/myNum/"+userAddress} target="_blank">{userAddress}</a></p>
+        </div>
+        <div>
+          <button type="button" onClick={actLogin}>{loginActive?'disconnect':'connect'}</button>
+        </div>
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
+        <div>
+        <span> 코인수:</span>
+        <span>
+          <select onChange={handleSelectChip} value={SelectedChip} >
+            {selectListChip.map((item) => ( <option value={item} key={item}> {item} </option> ))}
+          </select>
+          
+          <select onChange={handleSelectCoinName} value={SelectedCoinName} >
+            {selectListCoinName.map((item) => ( <option value={item} key={item}> {item} </option> ))}
+          </select>
+        </span>
+        </div>
         <Results games={gamesNumber} hits={hits} money={money} />
         <section className="controls">
           <ButtonStart playerNumbers={playerNumbers} start={startDraw} />
@@ -182,7 +225,7 @@ const [SEND_REQUEST, SHOW_LOADING, SHOW_RESULT] = [1, 2, 3]
         {/* <div className='donate-page'>
           {step === SEND_REQUEST &&
             (<>
-              <div className='title'>1KLAY를<br /> 아래 주소로 로또 참여</div>
+              <div className='title'>1KLAY를<br />  로또 참여</div>
               <div className='address'>{to}</div>
               <Button onClick={sendPrepareRequest}>KLAY 로또 참여하기</Button>
             </>)}
