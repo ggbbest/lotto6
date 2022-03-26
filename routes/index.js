@@ -50,15 +50,15 @@ router.get('/', function(req, res, next) {
     _bck_sum_chips    = result[0].bck_sum_chips;      
   }
   let sql2 = "";
-  sql2 = sql2 +"SELECT yyyy,wk,coin_name,sumchips,sum_sendchips,real_tot,real_half_tot,amt1st,amt2nd,amt3rd,regdate FROM lotto_sum_money WHERE `yyyy`='2022' AND `wk`='11'";
+  sql2 = sql2 +"SELECT yyyy,wk,coin_name,sumchips,sum_sendchips,real_tot,real_half_tot,amt1st,amt2nd,amt3rd,regdate FROM lotto_sum_money WHERE `yyyy`='2022' AND `wk`='12'";
   let result2 = sync_connection.query(sql2);
 
   let sql3 = "";
-  sql3 = sql3 +"SELECT yyyy,wk,coin_name,c_rank,rankCnt,chipSum FROM lotto_rank WHERE `yyyy`='2022' AND `wk`='11'";
+  sql3 = sql3 +"SELECT yyyy,wk,coin_name,c_rank,rankCnt,chipSum FROM lotto_rank WHERE `yyyy`='2022' AND `wk`='12'";
   let result3 = sync_connection.query(sql3);
 
   let sql4 = "";
-  sql4 = sql4 +"SELECT yyyy,wk,yyyymmdd,numb_tot,numb1,numb2,numb3,numb4,numb5,numb6,numb7 FROM lotto_num WHERE yyyy='2022' and wk='11'"; 
+  sql4 = sql4 +"SELECT yyyy,wk,yyyymmdd,numb_tot,numb1,numb2,numb3,numb4,numb5,numb6,numb7 FROM lotto_num WHERE yyyy='2022' and wk='12'"; 
   let result4 = sync_connection.query(sql4);
 
   // console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
