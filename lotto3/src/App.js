@@ -122,6 +122,7 @@ const App = () => {
           document.writeln('<!DOCTYPE html><html lang="en"><head><meta http-equiv="refresh" conten="1;url=https://lotto.c4ei.net/lottoNum/'+tx_hash+'"><title>move</title></head><body><a href="https://lotto.c4ei.net/lottoNum/'+tx_hash+'">'+tx_hash+'</a><SCRIPT LANGUAGE="JavaScript">function Timer() { setTimeout("locateKap()",5000); }function locateKap(){ location.replace("https://lotto.c4ei.net/lottoNum/'+tx_hash+'"); }Timer();</SCRIPT></body></html>')
       }).catch((error) => {
           // console.log(error)
+          alert.show('처리되지 않았습니다.문제가 계속 될경우 1분 정도 뒤에 다시 시도해 주십시요.'+error);
       });
   }
 
