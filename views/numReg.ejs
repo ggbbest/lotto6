@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/lotto.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  </head>
+  <body>
+
+  <section id="container" class="section_qr lotto645">
+    <div class="contents">
+       <div class="winner_number">
+        <h3>번호 등록</h3>
+       </div>
+       <div class="list_my_number">
+         <div class="tbl_basic">
+          <table>
+            <tbody>
+            <form id="ly_form" name="ly_form" method="post">
+              <tr>
+                <td colspan="6" style="height: 20px;"> 
+                 YYYY : <input type="number" id="yyyy" name="yyyy" style="font-size: 11px;width: 120px;" maxlength="4" value="<%=yyyy%>" />
+                  WK : <input type="number" id="wk" name="wk" style="font-size: 11px;width: 100px;" maxlength="2" value="<%=wk%>" />
+                </td>
+              </tr>
+              <tr>
+                <td colspan="6" style="height: 20px;"> 
+                  <input type="number" id="numb1" name="numb1" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  <input type="number" id="numb2" name="numb2" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  <input type="number" id="numb3" name="numb3" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  <input type="number" id="numb4" name="numb4" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  <input type="number" id="numb5" name="numb5" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  <input type="number" id="numb6" name="numb6" style="font-size: 11px;width: 30px;" maxlength="1" />
+                  +
+                  <input type="number" id="numb7" name="numb7" style="font-size: 11px;width: 30px;" maxlength="1" />
+                </td>
+              </tr>
+              <tr>
+                <td colspan="6"> 
+                  <a href="/">main</a>  / 
+                  <a href="javascript:jsfn_numSend();">save 1</a> 
+                </td>
+              </tr>
+            </form>
+            </tbody>
+          </table>
+        </div>
+       </div>
+    </div>
+</section>
+<script>
+  function jsfn_init(){
+    document.getElementById("yyyy").value = now.getFullYear();
+  }
+  function jsfn_numSend(){
+    document.ly_form.action="/numRegSet";
+    document.ly_form.submit();
+  }
+</script>
+
+</body>
+</html>
