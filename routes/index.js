@@ -54,11 +54,11 @@ router.get('/', function(req, res, next) {
   let result2 = sync_connection.query(sql2);
 
   let sql3 = "";
-  sql3 = sql3 +"SELECT yyyy,wk,coin_name,c_rank,rankCnt,chipSum FROM lotto_rank WHERE `yyyy`=YEAR(NOW()) AND `wk`=WEEK(NOW())";
+  sql3 = sql3 +"SELECT yyyy,wk,coin_name,c_rank,rankCnt,chipSum FROM lotto_rank WHERE `yyyy`=YEAR(NOW()) AND `wk`=WEEK(NOW())-1";
   let result3 = sync_connection.query(sql3);
 
   let sql4 = "";
-  sql4 = sql4 +"SELECT yyyy,wk,yyyymmdd,numb_tot,numb1,numb2,numb3,numb4,numb5,numb6,numb7 FROM lotto_num WHERE yyyy=YEAR(NOW()) and wk=WEEK(NOW())"; 
+  sql4 = sql4 +"SELECT yyyy,wk,yyyymmdd,numb_tot,numb1,numb2,numb3,numb4,numb5,numb6,numb7 FROM lotto_num WHERE yyyy=YEAR(NOW()) and wk=WEEK(NOW())-1"; 
   let result4 = sync_connection.query(sql4);
 
   // console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
