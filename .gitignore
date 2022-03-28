@@ -31,4 +31,5 @@ build
 
 *.sql
 
+index.js
 /routes
