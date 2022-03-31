@@ -61,7 +61,7 @@ router.get('/', function(req, res, next) {
   sql4 = sql4 +"SELECT yyyy,wk,yyyymmdd,numb_tot,numb1,numb2,numb3,numb4,numb5,numb6,numb7 FROM lotto_num WHERE yyyy=YEAR(NOW()) and wk=WEEK(NOW())-1"; 
   let result4 = sync_connection.query(sql4);
 
-  // console.log("######### server.js ######### "+timestamp()+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
+  console.log(timestamp()+"######### index.js ######### "+" _yyyy : "+_yyyy+" / _wk : "+_wk+" / c4ei_sum_chips : "+_c4ei_sum_chips+" / klay_sum_chips : "+_klay_sum_chips);
   res.render('index', { title: 'main', "yyyy":_yyyy, "wk":_wk, "c4ei_sum_chips":_c4ei_sum_chips, "klay_sum_chips":_klay_sum_chips , "ceik_sum_chips":_ceik_sum_chips
   , "ksp_sum_chips":_ksp_sum_chips, "bck_sum_chips":_bck_sum_chips , "result2":result2, "result3":result3, "result4":result4 });
 });

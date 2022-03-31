@@ -39,6 +39,40 @@ const App = () => {
   const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
    //////////////////////////////////////////////////////
 
+    // yarn add @ethersproject/units
+  // const { data: balance } = useSWR(["getBalance", account, "latest"])
+  // const fetcher = (library) => (...args) => {
+  //   const [method, ...params] = args
+  //   console.log(method, params)
+  //   return library[method](...params)
+  // }
+  // export const Balance = () => {
+  //   const { account, library } = useWeb3React<Web3Provider>();
+  //   const { data: balance } = useSWR(['getBalance', account, 'latest'], {
+  //     fetcher: fetcher(library),
+  //   })
+  //   if(!balance) {
+  //     return <div>...</div>
+  //   }
+  //   return <div>Ξ {parseFloat(formatEther(balance)).toPrecision(4)}</div>
+  // }
+  //////////////////////////////////////////////////////
+  // const [Balance, setBalance] = useState(0);
+  // async function getBal(send_account){
+  //     var Web3 = require('web3');
+  //     await window.ethereum.enable();
+  //     window.web3 = new Web3(window.ethereum);
+  //     window.web3.eth.getBalance(send_account, function(err, wei){
+  //       setBalance(window.web3.utils.fromWei(wei, "ether"));
+  //       alert(wei+":wei");
+  //       console.log("############ 65 /lotto2/src/App.js getBal: "+send_account+"####"+window.web3.utils.fromWei(wei, "ether")+"####");
+  //     });
+  //   }
+  // function CheckBalance() {
+  //   const [balance, getBalance] = useState;
+  //   useEffect(() => { balance = web3.eth.getBalance(account); });
+  // }
+  
   async function sendEthByMeta(send_account,send_amt) {
     // console.log("############ 138 /lotto2/src/App.js "+Header.jsDt.data[0].yyyywkr+"############");
     if(send_amt===undefined||send_amt===""){send_amt=1;}
