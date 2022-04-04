@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
-// import Meta from "./Metamask-auth";
+import Meta from "./Metamask-auth";
 import Header from "./Header";
 import Results from "./Results";
 import Coupon from "./Coupon";
@@ -9,8 +9,8 @@ import Display from "./Display";
 import ButtonReset from "./ButtonReset";
 import axios from 'axios'; 
 ///////////////////// metamask s ////////////////
-import {useWeb3React} from '@web3-react/core';
-import {injected} from './lib/connectors';
+// import {useWeb3React} from '@web3-react/core';
+// import {injected} from './lib/connectors';
 ///////////////////// metamask e ////////////////
 import { useAlert } from 'react-alert'
 
@@ -147,6 +147,7 @@ const App = () => {
 
   //yarn add react-alert
   const startDraw = () => {
+    alert.show('startDraw. account:'+account);
     if(account===undefined){
       alert.show('Metamask Login First !!!')
       return;
@@ -177,15 +178,8 @@ const App = () => {
   };
 
 ///////////////////// metamask s ////////////////
-const { chainId, account, active, activate, deactivate } = useWeb3React();
-const handleConnect = () => {
-  if(active) { deactivate(); return; }
-  activate(injected,(error)=>{
-    if('/No Ethereum provider was found on window.ethereum/'.test(error)){
-      window.open('https://metamask.io/download.html');
-    }
-  });
-}
+const [chainId, setchainId] = useState([]);
+const [account, setaccount] = useState([]);
 ///////////////////// metamask e ////////////////
 
 /* eslint-disable */
@@ -193,13 +187,7 @@ const handleConnect = () => {
     <div className="app">
       <Header />
       <main>
-        <div>
-          <p>Account: <a href={"/myNum/"+account} target="_blank">{account}</a></p>
-          <p>ChainId: {chainId}</p>
-        </div>
-        <div>
-          <button type="button" onClick={handleConnect}>{active?'disconnect':'connect'}</button>
-        </div>
+        <Meta account={account} chainId={chainId} />
         <Display drawedNumbers={drawedNumbers} />
         <Coupon numbers={numbers} add={addPlayerNumbers} />
         <div>
