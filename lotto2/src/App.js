@@ -34,7 +34,7 @@ const App = () => {
   const [hits, setHits] = useState(0);
   const [money, setMoney] = useState(0);
   //////////////////////////////////////////////////////
-  const selectListChip = ["1", "2", "3", "4", "5", "10", "20", "30", "40", "50", "100", "500", "1000"];
+  const selectListChip = ["1", "2", "3", "4", "5", "10", "50", "100", "500", "1000", "5000", "10000"];
   const [SelectedChip, setSelectedChip] = useState("");
   const handleSelectChip = (e) => { setSelectedChip(e.target.value); };
    //////////////////////////////////////////////////////
